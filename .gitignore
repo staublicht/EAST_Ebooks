@@ -1,7 +1,24 @@
-#################
-## Exclude all files that have passwords, or user identifying data
-#################
+# -------------------------
+# Exclude all files with passwords, user related data, or are system files
+# -------------------------
 
-*.test
+# example:
+db_authentication.php
+
+# ignore all files starting with . or ~, like .htaccess
+.*
+~*
+
+# track this file .gitignore (i.e. do NOT ignore it)
+!.gitignore
+# ignore log files
+*.log
 
 
+# -------------------------
+# Whitelisted Files: track these files, if they exist
+# -------------------------
+
+!.gitignore
+!README.md
+!CHANGELOG.md
