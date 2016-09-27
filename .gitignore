@@ -4,6 +4,7 @@
 
 # example:
 db_authentication.php
+config.php
 
 # ignore all files starting with . or ~, like .htaccess
 .*
