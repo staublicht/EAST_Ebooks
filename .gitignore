@@ -2,8 +2,6 @@
 # Exclude all files with passwords, user related data, or are system files
 # -------------------------
 
-# example:
-db_authentication.php
 config.php
 
 # ignore all files starting with . or ~, like .htaccess
@@ -24,7 +22,9 @@ config.php
 !README.md
 !CHANGELOG.md
 
+
 # -------------------------
 # Exclude directories
 # -------------------------
+
 dev/
