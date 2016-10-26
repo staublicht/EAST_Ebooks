@@ -23,3 +23,8 @@ config.php
 !.gitignore
 !README.md
 !CHANGELOG.md
+
+# -------------------------
+# Exclude directories
+# -------------------------
+dev/
