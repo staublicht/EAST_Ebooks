@@ -3,8 +3,12 @@
 class session
 {
 
+    public $status;
+
     function __construct()
     {
+
+        $this->status = false;
 
         if( session_status() == PHP_SESSION_NONE )
         {
