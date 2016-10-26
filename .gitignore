@@ -27,4 +27,4 @@ config.php
 # Exclude directories
 # -------------------------
 
-dev/*
+dev/
