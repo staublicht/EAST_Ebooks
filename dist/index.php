@@ -1,2 +1,2 @@
-<?php header("Location: api.php");
+<?php header("Location: index.html");
 exit;

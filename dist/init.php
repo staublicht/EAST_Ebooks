@@ -7,25 +7,15 @@ require_once ( 'config.php' );
 require_once ( 'inc/debug.php' );
 
 // require classes
+require_once ( 'inc/class.mysql.php' );
+require_once ( 'inc/class.session.php' );
 require_once ( 'inc/class.api.php' );
 
-// open database connection as global object
-$GLOBALS['db'] = new mysqli ( mysqli_host, mysqli_username, mysqli_passwd, mysqli_dbname, mysqli_port, mysqli_socket );
+// initialize mysql connection
+$mysql = new mysql;
 
-// if connection failed
-if ( $GLOBALS['db']->connect_errno )
-{
+// initialize session
+$session = new session;
 
-    die( 'DB Connection failed' );
-
-} else {
-
-    // success
-}
-
-if( session_status() == PHP_SESSION_NONE )
-{
-
-    session_start();
-
-}
+// initialize api class
+$api = new api;
