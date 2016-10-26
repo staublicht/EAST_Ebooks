@@ -1,0 +1,17 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Simon -- Designer, Frontend Development -- @Staublicht
+	Otto -- Backend Development --
+
+# THANKS
+
+    OM EAST
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3,
+	SASS, Bootstrap 4,
+    jQuery,	Ractive.js

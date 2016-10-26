@@ -8,6 +8,12 @@ config.php
 .*
 ~*
 
+#ignore node modules folder
+node_modules
+
+#ignore temp build files
+build/*
+
 # track this file .gitignore (i.e. do NOT ignore it)
 !.gitignore
 # ignore log files
