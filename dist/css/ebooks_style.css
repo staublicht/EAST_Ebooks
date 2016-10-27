@@ -4518,4 +4518,7 @@ a.text-gray-dark:focus, a.text-gray-dark:hover {
   .hidden-print {
     display: none !important; } }
 
+#ractive-container {
+  background-color: #2b89b2; }
+
 /*# sourceMappingURL=ebooks_style.css.map */

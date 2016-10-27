@@ -18,10 +18,10 @@ module.exports = function (grunt) {
 			},
 			ractive: {
 				files: ['src/ractive_components/*.html'],
-				tasks: ['clean','ractive','uglify']
+				tasks: ['js']
 			},
 			js: {
-				files: ['build/*.js','src/*.js'],
+				files: ['build/*.js', 'src/*.js'],
 				tasks: ['uglify']
 			},
 			livereload: {
@@ -47,9 +47,10 @@ module.exports = function (grunt) {
 			}
 		},
 
+		/*
 		concat: {
 			options: {
-				separator: '\n/*next file*/\n\n'  //this will be put between conc. files
+				separator: '\n// next file //\n\n'  //this will be put between conc. files
 			},
 			build: {
 				src: ['bootstrap.min.js','build/*.js', 'src/main.js'],
@@ -57,12 +58,27 @@ module.exports = function (grunt) {
 			}
 		},
 
+
 		ractive: {
 			options: {
+				type: 'cjs'
 			},
 			build: {
 				files: {
-					'build/' : 'src/ractive_components/*.html'
+					'src/ractive_components/' : 'src/ractive_components/*.html'
+				}
+			}
+		},
+		*/
+
+		browserify: {
+			options: {
+				debug: true,
+				transform: [['ractive-componentify', { extension: 'html', requireRactive: false }] ]
+			},
+			build: {
+				files: {
+					'build/ractive_components.js': ['src/ractive_components/index.js']
 				}
 			}
 		},
@@ -73,7 +89,9 @@ module.exports = function (grunt) {
 				sourceMap: true,
 				banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
 				'<%= grunt.template.today("yyyy-mm-dd") %> */',
-				//compress: true
+				compress: {
+					dead_code: true
+				}
 
 			},
 			build: {
@@ -94,8 +112,8 @@ module.exports = function (grunt) {
 					'node_modules/bootstrap/js/dist/tooltip.js',
 					//'node_modules/bootstrap/js/dist/popover.js',
 					/* Ractive */
-					'build/**/*.js',
 					'node_modules/ractive/ractive.js',
+					'build/ractive_components.js',
 					'src/main.js'
 				],
 				dest: 'dist/js/app_min.js'
@@ -103,21 +121,22 @@ module.exports = function (grunt) {
 		},
 
 		clean: {
-			build_folder: ['build/']
+			build: ['build/*']
 		}
 
 	});
 
 
-	grunt.registerTask('default', ['css','js']);
+	grunt.registerTask('default', ['css', 'js']);
 	grunt.registerTask('css', ['sass', 'cssmin']);
-	grunt.registerTask('js', ['clean', 'ractive', 'uglify']);
+	grunt.registerTask('js', ['clean', 'browserify', 'uglify']);
 
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-ractive');
+	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 

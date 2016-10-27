@@ -1,7 +1,7 @@
-<h1>Hello! this is var2: {{var2}}</h1>
+<h1>Hello, I'm a sub component! this is the test msg: {{msg}}</h1>
 
 <style>
-	p { color: red; }
+	h1 { background-color: #a23f3f; }
 </style>
 
 <script>
@@ -12,9 +12,6 @@
 		onrender: function () {
 			alert( 'initing component' );
 		},
-
-		data: {
-			letters: [ 'a', 'b', 'c' ]
-		}
+		isolated: true
 	};
 </script>
