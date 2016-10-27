@@ -18,11 +18,11 @@ module.exports = function (grunt) {
 			},
 			ractive: {
 				files: ['src/ractive_components/*.html'],
-				tasks: ['js']
+				tasks: ['copy']
 			},
 			js: {
 				files: ['build/*.js', 'src/*.js'],
-				tasks: ['uglify']
+				tasks: ['js']
 			},
 			livereload: {
 				files: 'dist/**/*',
@@ -71,6 +71,16 @@ module.exports = function (grunt) {
 		},
 		*/
 
+		copy: {
+			build: {
+				expand: true,
+				src: 'src/ractive_components/**',
+				dest: 'dist/component_templates/',
+				flatten: true,
+				filter: 'isFile'
+			}
+		},
+
 		browserify: {
 			options: {
 				debug: true,
@@ -78,7 +88,7 @@ module.exports = function (grunt) {
 			},
 			build: {
 				files: {
-					'build/ractive_components.js': ['src/ractive_components/index.js']
+					'build/bundle.js': ['src/main.js']
 				}
 			}
 		},
@@ -113,8 +123,8 @@ module.exports = function (grunt) {
 					//'node_modules/bootstrap/js/dist/popover.js',
 					/* Ractive */
 					'node_modules/ractive/ractive.js',
-					'build/ractive_components.js',
-					'src/main.js'
+					'node_modules/ractive-load/dist/ractive-load.umd.js',
+					'build/bundle.js',
 				],
 				dest: 'dist/js/app_min.js'
 			}
@@ -133,11 +143,12 @@ module.exports = function (grunt) {
 
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
-	grunt.loadNpmTasks('grunt-contrib-concat');
+	//grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-ractive');
+	//grunt.loadNpmTasks('grunt-ractive');
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 
 };
