@@ -1,0 +1,65 @@
+<table class="table">
+	<thead>
+		<tr>
+		{{#columns : key}}
+			<th>{{.}}</th>
+		{{/columns}}
+		</tr>
+	</thead>
+	<tbody>
+		{{#entries : i}}
+		<tr>
+			{{#columns : key}}
+			<td>{{{ entries[i][key] }}}</td>
+			{{/columns}}
+		</tr>
+		{{/entries}}
+	</tbody>
+</table>
+
+<script>
+	component.exports = {
+		onrender: function () {
+			//alert( 'initing component' );
+		},
+		isolated: true,
+		/* Test Data */
+		data: {
+				'columns' : { 'id' : "Id",
+											'author' : "Author",
+											 'original_title' : "Original Title",
+											 'language' : "Language",
+											 'status' : "Status",
+											 'release_date' : "Release Date",
+											 'downloads' : "Downloads"
+										},
+				'entries' : [
+					{ 'id' : 101 ,
+					 'author' : 'Patrisiýa Jon',
+					 'original_title' : 'Star of Light',
+					 'language' : 'Turkmen',
+					 'status' : 'incomplete',
+					 'release_date' : '-',
+					 'downloads' : '-'
+					},
+					{ 'id' : 102 ,
+					 'author' : 'Patrisiýa Jon',
+					 'original_title' : 'Star of Light',
+					 'language' : 'Turkmen',
+					 'status' : 'incomplete',
+					 'release_date' : '-',
+					 'downloads' : '-'
+					},
+					{ 'id' : 103 ,
+					 'author' : 'Patrisiýa Jon',
+					 'original_title' : 'Star of Light',
+					 'language' : 'Turkmen',
+					 'status' : 'incomplete',
+					 'release_date' : '-',
+					 'downloads' : '-'
+					}
+				]
+		}
+		/* */
+	};
+</script>

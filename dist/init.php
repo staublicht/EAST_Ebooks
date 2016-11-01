@@ -7,12 +7,12 @@ require_once ( 'config.php' );
 require_once ( 'inc/debug.php' );
 
 // require classes
-require_once ( 'inc/class.mysql.php' );
+//require_once ( 'inc/class.mysql.php' );
 require_once ( 'inc/class.session.php' );
 require_once ( 'inc/class.api.php' );
 
 // initialize mysql connection
-$mysql = new mysql;
+//$mysql = new mysql;
 
 // initialize session
 $session = new session;

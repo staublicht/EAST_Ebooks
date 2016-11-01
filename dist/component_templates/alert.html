@@ -1,0 +1,18 @@
+<div class="alert alert-{{type}} alert-dismissible fade in" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	{{{content}}}
+</div>
+
+
+<script>
+	component.exports = {
+		onrender: function () {
+			if (typeof data.type != 'undefined') {
+				data.type = "warning";
+			}
+		},
+		isolated: true
+	};
+</script>

@@ -1,0 +1,19 @@
+<nav class="navbar navbar-dark bg-inverse navbar-fixed-top">
+	<a class="navbar-brand" href="#">eBooks Database</a>
+	<ul class="nav navbar-nav">
+	{{#entries : i}}
+		<li class="nav-item {{# i === selected_index}}active{{/i}}">
+			<a class="nav-link" href="#" on-click="selection{{i}}">{{.}} {{# i === selected_index}}<span class="sr-only">(current)</span>{{/i}}</a>
+		</li>
+	{{/entries}}
+</nav>
+
+
+<script>
+	component.exports = {
+		onrender: function () {
+			//alert( 'initing component' );
+		},
+		isolated: true
+	};
+</script>

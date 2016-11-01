@@ -1,0 +1,54 @@
+<nav aria-label="list pages">
+	<ul class="pagination">
+		{{#if current_page > 1}}
+		<li class="page-item">
+			<a class="page-link" href="#" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+				<span class="sr-only">Previous</span>
+			</a>
+		</li>
+		{{/if}}
+
+		{{#pages(no_pages)}}
+			{{#if this === current_page}}
+		<li class="page-item active">
+			<span class="page-link">{{.}} <span class="sr-only">(current)</span></span>
+		</li>
+			{{else}}
+		<li class="page-item"><a class="page-link" href="#">{{.}}</a></li>
+			{{/if}}
+		{{/pages}}
+
+		{{#if current_page < no_pages}}
+		<li class="page-item">
+			<a class="page-link" href="#" aria-label="Next">
+				<span aria-hidden="true">&raquo;</span>
+				<span class="sr-only">Next</span>
+			</a>
+		</li>
+		{{/if}}
+	</ul>
+</nav>
+
+
+<script>
+	component.exports = {
+		onrender: function () {
+			//alert( 'initing component' );
+		},
+		isolated: true,
+		data: function() {
+			return {
+				current_page : 1,
+				no_pages : 4,
+				pages : function( no_pages ){
+					var array = [];
+					for(i = 1; i <= no_pages; i++){
+						array.push(i);
+					}
+					return array;
+				}
+			};
+		}
+	};
+</script>

@@ -13,15 +13,15 @@ module.exports = function (grunt) {
 
 		watch: {
 			sass: {
-				files: 'src/scss/*.scss',
+				files: 'src/scss/**/*.scss',
 				tasks: ['css']
 			},
 			ractive: {
-				files: ['src/ractive_components/*.html'],
-				tasks: ['copy']
+				files: ['src/ractive_components/**/*.html'],
+				tasks: ['clean:templates','copy']
 			},
 			js: {
-				files: ['build/*.js', 'src/*.js'],
+				files: ['src/**/*.js'],
 				tasks: ['js']
 			},
 			livereload: {
@@ -83,12 +83,15 @@ module.exports = function (grunt) {
 
 		browserify: {
 			options: {
-				debug: true,
+				browserifyOptions: {
+					debug: true
+				},
 				transform: [['ractive-componentify', { extension: 'html', requireRactive: false }] ]
 			},
 			build: {
 				files: {
-					'build/bundle.js': ['src/main.js']
+					//'build/bundle.js': ['src/main.js']
+					'dist/js/app.js': ['src/main.js']
 				}
 			}
 		},
@@ -106,8 +109,9 @@ module.exports = function (grunt) {
 			},
 			build: {
 				src: [
+					'dist/js/app.js',
 					/* Required for bootstrap */
-					'node_modules/jquery/dist/jquery.js',
+					//'node_modules/jquery/dist/jquery.js',
 					'node_modules/tether/dist/js/tether.js',
 					/* Bootstrap scripts */
 					'node_modules/bootstrap/js/dist/util.js',
@@ -122,24 +126,24 @@ module.exports = function (grunt) {
 					'node_modules/bootstrap/js/dist/tooltip.js',
 					//'node_modules/bootstrap/js/dist/popover.js',
 					/* Ractive */
-					'node_modules/ractive/ractive.js',
-					'node_modules/ractive-load/dist/ractive-load.umd.js',
-					'build/bundle.js',
+					//'node_modules/ractive/ractive.js',
+					//'node_modules/ractive-load/dist/ractive-load.umd.js',
 				],
 				dest: 'dist/js/app_min.js'
 			}
 		},
 
 		clean: {
-			build: ['build/*']
+			build: ['build/*'],
+			templates: ['dist/component_templates/**']
 		}
 
 	});
 
 
-	grunt.registerTask('default', ['css', 'js']);
+	grunt.registerTask('default', [, 'clean', 'copy', 'css', 'js']);
 	grunt.registerTask('css', ['sass', 'cssmin']);
-	grunt.registerTask('js', ['clean', 'browserify', 'uglify']);
+	grunt.registerTask('js', ['clean:build', 'browserify', 'uglify']);
 
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');

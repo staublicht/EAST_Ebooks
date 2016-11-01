@@ -1,48 +1,89 @@
-/*global $, JQuery, Ractive, window */
+/*jslint
+		node : true, browser : true, devel : true, maxlen: 122, indent: 2, sloppy: true
+*/
+/*global
+*/
+
+//Definitions
+var jQuery, $, Ractive, EbookServer;
+window.jQuery = $ = require('jquery');
+Ractive = require('ractive');
+Ractive.load = require('ractive-load');
+EbookServer = require('./js/ebooks_server_api.js');
+
 
 Ractive.load.baseUrl = 'component_templates/';
 
-Ractive.load( 'test.html' ).then( function ( Test_widget ){
-	Ractive.components.test = Test_widget;
+//Error handling
+function handleError(e) {
+	"use strict";
+	console.log(e);
+}
 
-	init();
-}).catch( handleError );
+//Init
+var RactivePage;
+function init() {
+	"use strict";
+	var init_data = {
+			page_title: "Ebooks List",
+			menu: {
+				entries : [
+					"Books",
+					"Categories",
+					"Languages",
+					"Stats"],
+				selected_index : 0
+			}
+		};
+
+	Ractive.load('page_list.html').then(function (RPage) {
+		RactivePage = new RPage({
+			el: '#ractive_page',
+			data: init_data
+		});
+	})//.catch(handleError);
+}
+init();
+
+
+
+//TEST component
+
+Ractive.load('test.html').then(function (Test_widget) {
+	Ractive.components.test = Test_widget;
+	initTest();
+})//.catch(handleError);
 
 
 var test_booklist = [];
 
-function init(){
-	var ractive = new Ractive({
+function initTest() {
+	var ractiveTest = new Ractive({
 		el: '#ractive-container',
 		template: "<h1>Test {{name}}</h1> <test msg={{testmsg}} booklist={{booklist}} />",
 		data: {
 			name: "World",
 			testmsg: ">>Test in sub component<<",
 			booklist: test_booklist
-		},
+		}
 	});
 
-	ractive.on( 'test.loadRequest' , function ( event ){
+	ractiveTest.on('test.loadRequest', function (event) {
 		console.log("loadRequest geklickt.");
-		var send_data = {'action':'load', 'type':'ebook', 'id':'123'};
-		$.post('api.php?v=' + Math.floor(Math.random() * 500), send_data ).then(function (return_data) {
-			console.log("API LOAD Request successful:",return_data);
+		var send_data = {'type': 'ebook', 'id': '123'};
+		EbookServer.load(send_data).then(function (return_data) {
+			console.log("API LOAD Request successful:", return_data);
 			test_booklist.push(return_data);
 		});
 	});
 
-	ractive.on( 'test.sendRequest' , function ( event ){
-		console.log("sendRequest geklickt.");
-		var send_data = {'action':'save', 'type':'ebook', 'id':'123', 'save_name':'123', 'save_value':'123'};
-		$.post('api.php?v=' + Math.floor(Math.random() * 500), send_data ).then(function (return_data) {
-			console.log("API SEND Request successful:",return_data);
+	ractiveTest.on('test.sendRequest', function (event) {
+		console.log("loadRequest geklickt.");
+		var send_data = {'type': 'ebook', 'id': '123'};
+		EbookServer.save(send_data).then(function (return_data) {
+			console.log("API LOAD Request successful:", return_data);
+			test_booklist.push(return_data);
 		});
 	});
 
-}
-
-
-//Error handling
-function handleError (e) {
-	console.log(e);
 }
