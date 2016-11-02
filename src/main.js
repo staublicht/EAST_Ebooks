@@ -41,6 +41,8 @@ function init() {
 			el: '#ractive_page',
 			data: init_data
 		});
+
+		window.RactivePage = RactivePage; //for debugging, TODO: remove or comment
 	});//.catch(handleError);
 }
 init();

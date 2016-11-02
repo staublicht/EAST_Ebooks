@@ -7,8 +7,8 @@
 		{{/if}}
 	</button>
 	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-		<a class="dropdown-item" on-click="dropdownSelection" href="#">All</a>
-		{{#listOptions}}
+		<a class="dropdown-item" on-click="dropdownSelectAll" href="#">All</a>
+		{{#listOptions : i}}
 		<a class="dropdown-item" on-click="dropdownSelection" href="#">{{{.}}}</a>
 		{{/listOptions}}
 	</div>
@@ -17,6 +17,19 @@
 
 <script>
 	component.exports = {
+		onrender: function () {
+
+			this.on( 'dropdownSelectAll', function (event) {
+				console.log( 'Dropdown SelectAll!', event );
+				this.set('selectedIndex', -1);
+			});
+
+			this.on( 'dropdownSelection', function (event) {
+				console.log( 'Dropdown Selection!' , event );
+				this.set('selectedIndex', event.index.i );
+			});
+
+		},
 		isolated: true
 	};
 </script>
