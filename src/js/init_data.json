@@ -12,11 +12,11 @@
 	selectedLang : -1,
 	categories : ["Family"],
 	selectedCat : -1,
-	status_types : [
-		{'tag': 'incomplete', 'html' : '<span class="tag tag-pill tag-danger">incomplete</span>'},
-		{'tag': 'ready', 'html' : '<span class="tag tag-pill tag-warning">ready</span>'},
-		{'tag': 'published', 'html' : '<span class="tag tag-pill tag-success">published</span>'},
-		{'tag': 'blocked', 'html' : '<span class="tag tag-pill tag-default">blocked</span>'}
+	status_tags : [
+		'<span class="tag tag-pill tag-danger">incomplete</span>',
+		'<span class="tag tag-pill tag-warning">ready</span>',
+		'<span class="tag tag-pill tag-success">published</span>',
+		'<span class="tag tag-pill tag-default">blocked</span>'
 	],
 	selectedStatus : -1
 }

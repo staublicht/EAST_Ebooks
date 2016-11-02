@@ -1,0 +1,22 @@
+<div class="btn-group">
+	<button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		{{#if selectedIndex == -1}}
+			All
+		{{else}}
+			{{{listOptions[selectedIndex]}}}
+		{{/if}}
+	</button>
+	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+		<a class="dropdown-item" on-click="dropdownSelection" href="#">All</a>
+		{{#listOptions}}
+		<a class="dropdown-item" on-click="dropdownSelection" href="#">{{{.}}}</a>
+		{{/listOptions}}
+	</div>
+</div>
+
+
+<script>
+	component.exports = {
+		isolated: true
+	};
+</script>
