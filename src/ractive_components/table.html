@@ -10,7 +10,11 @@
 		{{#entries : i}}
 		<tr>
 			{{#columns : key}}
-			<td>{{{ entries[i][key] }}}</td>
+			{{ #if key != 'status' }}
+				<td>{{{ entries[i][key] }}}</td>
+			{{else}}
+				<td>{{{ status_types[i].html }}}</td>
+			{{/if}}
 			{{/columns}}
 		</tr>
 		{{/entries}}
@@ -24,7 +28,8 @@
 		},
 		isolated: true,
 		/* Test Data */
-		data: {
+		data: function() {
+			return {
 				'columns' : { 'id' : "Id",
 											'author' : "Author",
 											 'original_title' : "Original Title",
@@ -38,7 +43,7 @@
 					 'author' : 'Patrisiýa Jon',
 					 'original_title' : 'Star of Light',
 					 'language' : 'Turkmen',
-					 'status' : 'incomplete',
+					 'status' : 0,
 					 'release_date' : '-',
 					 'downloads' : '-'
 					},
@@ -46,7 +51,7 @@
 					 'author' : 'Patrisiýa Jon',
 					 'original_title' : 'Star of Light',
 					 'language' : 'Turkmen',
-					 'status' : 'incomplete',
+					 'status' : 2,
 					 'release_date' : '-',
 					 'downloads' : '-'
 					},
@@ -54,11 +59,12 @@
 					 'author' : 'Patrisiýa Jon',
 					 'original_title' : 'Star of Light',
 					 'language' : 'Turkmen',
-					 'status' : 'incomplete',
+					 'status' : 3,
 					 'release_date' : '-',
 					 'downloads' : '-'
 					}
 				]
+			};
 		}
 		/* */
 	};

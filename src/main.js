@@ -5,12 +5,12 @@
 */
 
 //Definitions
-var jQuery, $, Ractive, EbookServer;
+var jQuery, $, Ractive, EbookServer, bootstrap, init_data;
 window.jQuery = $ = require('jquery');
 Ractive = require('ractive');
 Ractive.load = require('ractive-load');
 EbookServer = require('./js/ebooks_server_api.js');
-
+init_data = require('./js/init_data.json');
 
 Ractive.load.baseUrl = 'component_templates/';
 
@@ -22,26 +22,26 @@ function handleError(e) {
 
 //Init
 var RactivePage;
+
 function init() {
 	"use strict";
-	var init_data = {
-			page_title: "Ebooks List",
-			menu: {
-				entries : [
-					"Books",
-					"Categories",
-					"Languages",
-					"Stats"],
-				selected_index : 0
-			}
-		};
+
+	var helpers;
+
+	//global helper functions
+	helpers = Ractive.defaults.data;
+	/*
+	helpers.return_status_type = function (key) {
+		return this.data.status_types[key];
+	};
+	*/
 
 	Ractive.load('page_list.html').then(function (RPage) {
 		RactivePage = new RPage({
 			el: '#ractive_page',
 			data: init_data
 		});
-	})//.catch(handleError);
+	});//.catch(handleError);
 }
 init();
 
@@ -52,7 +52,7 @@ init();
 Ractive.load('test.html').then(function (Test_widget) {
 	Ractive.components.test = Test_widget;
 	initTest();
-})//.catch(handleError);
+});//.catch(handleError);
 
 
 var test_booklist = [];

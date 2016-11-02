@@ -7,6 +7,7 @@
  */
 
 module.exports = function (grunt) {
+	"use strict";
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
@@ -18,10 +19,10 @@ module.exports = function (grunt) {
 			},
 			ractive: {
 				files: ['src/ractive_components/**/*.html'],
-				tasks: ['clean:templates','copy']
+				tasks: ['clean:templates', 'copy']
 			},
 			js: {
-				files: ['src/**/*.js'],
+				files: ['src/**/*.js', 'src/**/*.json'],
 				tasks: ['js']
 			},
 			livereload: {

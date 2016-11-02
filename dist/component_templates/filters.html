@@ -1,19 +1,83 @@
-<div class="row">
-	<div class="col-xs-12 my-1">
-		<form class="form-inline">
-			<div class="form-group">
-				<input class="form-control" type="search" placeholder="Search" id="example-search-input">
-				<button class="btn btn-default" type="submit">Search</button>
+<form class="form-inline mb-1">
+		<div class="form-group mt-1 mr-1">
+			<input class="form-control" type="search" placeholder="Search" id="example-search-input">
+			<button class="btn btn-secondary" type="submit">Search</button>
+		</div>
+		<div class="form-group mt-1 mr-1">
+			Language
+			<div class="btn-group">
+				<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{{#if selectedLang == -1}}
+						All
+					{{else}}
+						{{languages[selectedLang]}}
+					{{/if}}
+				</button>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" href="#">All</a>
+					{{#languages : key}}
+					<a class="dropdown-item" href="#">{{.}}</a>
+					{{/languages}}
+				</div>
 			</div>
-			<div class="form-group ml-1">
-				<label for="exampleSelect1">Language</label>
-				<select class="form-control" id="exampleSelect1">
-				{{#languages}}
-					<option>{{.}}</option>
-				{{/languages}}
-				</select>
+		</div>
+		<div class="form-group mt-1 mr-1">
+			Category
+			<div class="btn-group">
+				<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{{#if selectedCat == -1}}
+						All
+					{{else}}
+						{{categories[selectedCat]}}
+					{{/if}}
+				</button>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" href="#">All</a>
+					{{#categories : key}}
+					<a class="dropdown-item" href="#">{{.}}</a>
+					{{/categories}}
+				</div>
 			</div>
-		</form>
-	</div>
-</div>
+		</div>
+		<div class="form-group mt-1 mr-1">
+			Status
+			<div class="btn-group">
+				<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					{{#if selectedStatus == -1}}
+						All
+					{{else}}
+						{{{status_types[selectedStatus].html}}}
+					{{/if}}
+				</button>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" href="#">All</a>
+					{{#status_types : i}}
+					<a class="dropdown-item" href="#">{{{status_types[i].html}}}</a>
+					{{/status_types}}
+				</div>
+			</div>
+		</div>
+</form>
 
+<script>
+	component.exports = {
+		onrender: function () {
+			//alert( 'initing component' );
+		},
+		isolated: true,
+		/* Test Data
+		data: function() {
+			return {
+				languages : ["English"],
+				categories : ["Family"],
+				status_types : {
+					'incomplete' : '<span class="tag tag-pill tag-danger">incomplete</span>',
+					'ready' : '<span class="tag tag-pill tag-warning">ready</span>',
+					'published' : '<span class="tag tag-pill tag-success">published</span>',
+					'blocked' : '<span class="tag tag-pill tag-default">blocked</span>'
+				}
+			};
+		}
+		*/
+	};
+</script>

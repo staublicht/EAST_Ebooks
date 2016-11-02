@@ -1,16 +1,27 @@
-<link rel='ractive' href='navbar.html' name='r-navbar'>
-<link rel='ractive' href='filters.html' name='r-filters'>
-<link rel='ractive' href='pagination.html' name='r-pagination'>
-<link rel='ractive' href='table.html' name='r-table'>
-<link rel='ractive' href='footer.html' name='r-footer'>
+<link rel='ractive' href='navbar.html?v=1' name='r-navbar'>
+<link rel='ractive' href='filters.html?v=1' name='r-filters'>
+<link rel='ractive' href='pagination.html?v=1' name='r-pagination'>
+<link rel='ractive' href='table.html?v=1' name='r-table'>
+<link rel='ractive' href='footer.html?v=1' name='r-footer'>
 
 <r-navbar entries={{menu.entries}} selected_index={{menu.selected_index}}>
 </r-navbar>
 
-<r-filters></r-filters>
+<r-filters
+	languages={{languages}}
+	categories={{categories}}
+	status_types={{status_types}}
+	selectedLang={{selectedLang}}
+	selectedCat={{selectedCat}}
+	selectedStatus={{selectedStatus}}
+></r-filters>
 
 <r-pagination></r-pagination>
-<r-table></r-table>
+
+<r-table
+	status_types={{status_types}}
+></r-table>
+
 <r-pagination></r-pagination>
 
 <r-footer></r-footer>
