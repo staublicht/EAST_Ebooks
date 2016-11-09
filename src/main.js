@@ -5,14 +5,13 @@
 */
 
 //Definitions
-var jQuery, $, Ractive, EbookServer, bootstrap, init_data;
+var jQuery, $, Ractive, EbookServer, bootstrap, app_data, mainRactive;
 window.jQuery = $ = require('jquery');
 Ractive = require('ractive');
 Ractive.load = require('ractive-load');
 EbookServer = require('./js/ebooks_server_api.js');
-init_data = require('./js/init_data.json');
-
-Ractive.load.baseUrl = 'component_templates/';
+app_data = require('./js/init_data.json');
+mainRactive = new Ractive();
 
 //Error handling
 function handleError(e) {
@@ -20,34 +19,68 @@ function handleError(e) {
 	console.log(e);
 }
 
-//Init
-var RactivePage;
+function loadPage(page_id) {
+
+	if (typeof mainRactive.teardown !== "undefined") {
+		mainRactive.teardown();
+	}
+
+	if (app_data.login_state && app_data.session_key) {
+		Ractive.load(app_data.pages[app_data.login_page]).then(function (RPage) {
+			mainRactive = new RPage({
+				el: app_data.target_element,
+				data: app_data
+			});
+			app_data.current_page = page_id;
+		});
+	} else {
+		Ractive.load(app_data.pages[app_data.login_page]).then(function (RPage) {
+			mainRactive = new RPage({
+				el: app_data.target_element,
+				data: app_data
+			});
+			app_data.current_page = app_data.login_page;
+		});
+	}
+
+}
 
 function init() {
 	"use strict";
 
-	var helpers;
+	var helpers, RactivePage;
 
 	//global helper functions
 	helpers = Ractive.defaults.data;
-	/*
-	helpers.return_status_type = function (key) {
-		return this.data.status_types[key];
+	Ractive.load.baseUrl = app_data.component_base_url;
+
+	helpers.showAlert = function (type, content, dismissible) {
+		return false;
 	};
-	*/
 
-	Ractive.load('page_list.html').then(function (RPage) {
-		RactivePage = new RPage({
-			el: '#ractive_page',
-			data: init_data
+	helpers.loginFunction = function (user, pw) {
+		EbookServer.login(user, pw).then(function (return_data) {
+			console.log("API Login Request:", return_data);
+			return_data = JSON.parse(return_data);
+			if (return_data.login_state) {
+				app_data.login_state = return_data.login_state;
+				app_data.session_key = return_data.session_key;
+				loadPage(app_data.pages[app_data.current_page]);
+			} else {
+				if (app_data.current_page === app_data.login_page) {
+					mainRactive.set('alerts', [{ type : "warning", content : "Login Failed!", dismissible : false}]);
+				} else {
+					loadPage(app_data.login_page);
+				}
+			}
 		});
+	};
 
-		window.RactivePage = RactivePage; //for debugging, TODO: remove or comment
-	});//.catch(handleError);
+	loadPage(app_data.pages[app_data.index_page]);
 }
+
+/* Init */
 init();
-
-
 
 //TEST component
 
@@ -74,7 +107,7 @@ function initTest() {
 		console.log("loadRequest geklickt.");
 		var send_data = {'type': 'ebook', 'id': '123'};
 		EbookServer.load(send_data).then(function (return_data) {
-			console.log("API LOAD Request successful:", return_data);
+			console.log("API LOAD Request:", return_data);
 			test_booklist.push(return_data);
 		});
 	});
@@ -83,7 +116,7 @@ function initTest() {
 		console.log("loadRequest geklickt.");
 		var send_data = {'type': 'ebook', 'id': '123'};
 		EbookServer.save(send_data).then(function (return_data) {
-			console.log("API LOAD Request successful:", return_data);
+			console.log("API SAVE Request:", return_data);
 			test_booklist.push(return_data);
 		});
 	});

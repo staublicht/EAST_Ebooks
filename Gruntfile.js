@@ -99,7 +99,7 @@ module.exports = function (grunt) {
 
 		uglify: {
 			options: {
-				mangle: true,
+				//mangle: true,
 				sourceMap: true,
 				banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
 				'<%= grunt.template.today("yyyy-mm-dd") %> */',

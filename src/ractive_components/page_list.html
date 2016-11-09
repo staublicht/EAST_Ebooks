@@ -7,6 +7,10 @@
 <r-navbar entries={{menu.entries}} selected_index={{menu.selected_index}}>
 </r-navbar>
 
+{{#alerts}}
+<r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
+{{/alerts}}
+
 <r-filters
 	languages={{languages}}
 	categories={{categories}}

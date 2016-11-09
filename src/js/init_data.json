@@ -1,4 +1,7 @@
 {
+	login_state: false,
+	session_key: false,
+	target_element: "#ractive_page",
 	page_title: "Ebooks List",
 	menu: {
 		entries : [
@@ -18,5 +21,13 @@
 		'<span class="tag tag-pill tag-success">published</span>',
 		'<span class="tag tag-pill tag-default">blocked</span>'
 	],
-	selectedStatus : -1
+	selectedStatus : -1,
+	pages : [
+		'page_login.html',
+		'page_list.html'
+	],
+	login_page : 0,
+	index_page : 1,
+	current_page : 0,
+	component_base_url : 'component_templates/'
 }

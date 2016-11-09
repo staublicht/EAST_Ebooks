@@ -28,3 +28,4 @@ function makeRequest(type, send_data) {
 
 exports.load = function (send_data) { return makeRequest('load', send_data); };
 exports.save = function (send_data) { return makeRequest('save', send_data); };
+exports.login = function (user, pw) { return makeRequest('login', { 'user' : user, 'pw' : pw }); };

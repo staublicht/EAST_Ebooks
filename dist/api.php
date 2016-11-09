@@ -63,6 +63,10 @@ if( isset( $_POST['action'] ) )
 			}
 		}
 
+		if( $_POST['action'] == 'login' ){
+			$output = array( 'login_state' => false, 'session_key' => '001');
+		}
+
 }
 else
 {

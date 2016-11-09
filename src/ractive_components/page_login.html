@@ -1,0 +1,7 @@
+<link rel='ractive' href='alert.html?v=1' name='r-alert'>
+<link rel='ractive' href='login.html?v=1' name='r-login'>
+
+{{#alerts}}
+<r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
+{{/alerts}}
+<r-login />

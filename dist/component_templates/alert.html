@@ -1,7 +1,9 @@
-<div class="alert alert-{{type}} alert-dismissible fade in" role="alert">
+<div class="alert alert-{{type}} {{#dismissible}}alert-dismissible{{/dismissible}} fade in" role="alert">
+	{{#dismissible}}
 	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 		<span aria-hidden="true">&times;</span>
 	</button>
+	{{/dismissible}}
 	{{{content}}}
 </div>
 
@@ -9,10 +11,13 @@
 <script>
 	component.exports = {
 		onrender: function () {
-			if (typeof data.type != 'undefined') {
-				data.type = "warning";
-			}
 		},
-		isolated: true
+		isolated: true,
+		data: function () {
+			return {
+				type : "warning",
+				dismissible : false
+			};
+		}
 	};
 </script>
