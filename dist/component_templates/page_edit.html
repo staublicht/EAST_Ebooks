@@ -1,0 +1,41 @@
+<link rel='ractive' href='navbar.html?v=1' name='r-navbar'>
+<link rel='ractive' href='dropdownbtnall.html?v=1' name='r-dropdown'>
+<link rel='ractive' href='footer.html?v=1' name='r-footer'>
+
+<r-navbar entries={{menu.entries}} selected_index={{menu.selected_index}}>
+</r-navbar>
+
+{{#alerts}}
+<r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
+{{/alerts}}
+
+<form>
+	<div class="form-group mt-1 mr-1">
+		<input class="form-control" type="search" placeholder="Search" id="example-search-input">
+		<button class="btn btn-secondary" type="submit">Search</button>
+	</div>
+	<div class="form-group mt-1 mr-1">
+		Language
+		<r-dropdown selectedIndex={{selectedLang}} listOptions={{languages}} />
+	</div>
+	<div class="form-group mt-1 mr-1">
+		Category
+		<r-dropdown selectedIndex={{selectedCat}} listOptions={{categories}} />
+	</div>
+	<div class="form-group mt-1 mr-1">
+		Status
+		<r-dropdown selectedIndex={{selectedStatus}} listOptions={{status_tags}} />
+	</div>
+</form>
+
+<r-footer></r-footer>
+
+<script>
+	component.exports = {
+		onrender: function () {
+			console.log( 'Edit Page loaded.');
+
+			//
+		}
+	};
+</script>

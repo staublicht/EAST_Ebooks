@@ -10,7 +10,7 @@ window.jQuery = $ = require('jquery');
 Ractive = require('ractive');
 Ractive.load = require('ractive-load');
 EbookServer = require('./js/ebooks_server_api.js');
-app_data = require('./js/init_data.json');
+app_data = require('./js/app_data.json');
 mainRactive = new Ractive();
 
 //Error handling
@@ -19,17 +19,21 @@ function handleError(e) {
 	console.log(e);
 }
 
-function loadPage(page_id) {
+function loadPage(page_id, page_data) {
 
 	if (typeof mainRactive.teardown !== "undefined") {
 		mainRactive.teardown();
 	}
 
+	var data = $.extend({}, app_data, page_data);
+
+	//console.log("Hello" , data);
+
 	if (app_data.login_state && app_data.session_key) {
-		Ractive.load(app_data.pages[app_data.login_page]).then(function (RPage) {
+		Ractive.load(app_data.pages[page_id]).then(function (RPage) {
 			mainRactive = new RPage({
 				el: app_data.target_element,
-				data: app_data
+				data: data
 			});
 			app_data.current_page = page_id;
 		});
@@ -37,7 +41,7 @@ function loadPage(page_id) {
 		Ractive.load(app_data.pages[app_data.login_page]).then(function (RPage) {
 			mainRactive = new RPage({
 				el: app_data.target_element,
-				data: app_data
+				data: data
 			});
 			app_data.current_page = app_data.login_page;
 		});
@@ -45,10 +49,30 @@ function loadPage(page_id) {
 
 }
 
+function serverLogin(user, pw) {
+	EbookServer.login(user, pw).then(function (return_data) {
+		console.log("API Login Request:", return_data);
+		return_data = JSON.parse(return_data);
+		if (return_data.login_state) {
+			console.log("login state:", return_data.login_state);
+			app_data.login_state = return_data.login_state;
+			app_data.session_key = return_data.session_key;
+			loadPage(app_data.index_page);
+		} else {
+			if (app_data.current_page === app_data.login_page) {
+				mainRactive.set('alerts', [{ type : "warning", content : "Login Failed!", dismissible : false}]);
+				//TODO: handle Server not reachable? Should we have some possibility to work offline in future?
+			} else {
+				loadPage(app_data.login_page);
+			}
+		}
+	});
+}
+
 function init() {
 	"use strict";
 
-	var helpers, RactivePage;
+	var helpers;
 
 	//global helper functions
 	helpers = Ractive.defaults.data;
@@ -58,25 +82,10 @@ function init() {
 		return false;
 	};
 
-	helpers.loginFunction = function (user, pw) {
-		EbookServer.login(user, pw).then(function (return_data) {
-			console.log("API Login Request:", return_data);
-			return_data = JSON.parse(return_data);
-			if (return_data.login_state) {
-				app_data.login_state = return_data.login_state;
-				app_data.session_key = return_data.session_key;
-				loadPage(app_data.pages[app_data.current_page]);
-			} else {
-				if (app_data.current_page === app_data.login_page) {
-					mainRactive.set('alerts', [{ type : "warning", content : "Login Failed!", dismissible : false}]);
-				} else {
-					loadPage(app_data.login_page);
-				}
-			}
-		});
-	};
+	helpers.loginFunction = serverLogin;
+	helpers.loadPage = loadPage;
 
-	loadPage(app_data.pages[app_data.index_page]);
+	loadPage(app_data.index_page);
 }
 
 /* Init */
@@ -88,7 +97,6 @@ Ractive.load('test.html').then(function (Test_widget) {
 	Ractive.components.test = Test_widget;
 	initTest();
 });//.catch(handleError);
-
 
 var test_booklist = [];
 

@@ -1,0 +1,33 @@
+{
+	"login_state" : true,
+	"session_key" : "false",
+	"target_element" : "#ractive_page",
+	"page_title" : "Ebooks Management",
+	"menu" : {
+		"entries" : [
+			"Books",
+			"Categories",
+			"Languages",
+			"Stats"],
+		"selected_index" : 0
+	},
+	"languages" : ["English", "Turkmen", "Farsi"],
+	"categories" : ["Family"],
+	"status_tags" : [
+		'<span class="tag tag-pill tag-danger">incomplete</span>',
+		'<span class="tag tag-pill tag-warning">ready</span>',
+		'<span class="tag tag-pill tag-success">published</span>',
+		'<span class="tag tag-pill tag-default">blocked</span>'
+	],
+	"pages" : [
+		'page_login.html',
+		'page_list.html',
+		'page_edit.html'
+	],
+	"login_page" : 0,
+	"index_page" : 1,
+	"edit_page" : 2,
+	"current_page" : 0,
+	"component_base_url" : 'component_templates/',
+	"highlight_colour" : '#e89853'
+}

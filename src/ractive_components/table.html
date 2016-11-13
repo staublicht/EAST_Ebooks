@@ -1,3 +1,13 @@
+<style type="text/css">
+	tbody tr:hover {
+		background-color: #ffcfa5;
+	}
+	tbody tr a {
+
+	}
+</style>
+
+
 <table class="table">
 	<thead>
 		<tr>
@@ -8,12 +18,12 @@
 	</thead>
 	<tbody>
 		{{#entries : i}}
-		<tr>
+		<tr on-click="entryClicked">
 			{{#columns : key}}
 			{{ #if key != 'status' }}
-				<td>{{{ entries[i][key] }}}</td>
+				<td >{{{ entries[i][key] }}}</td>
 			{{else}}
-				<td>{{{ status_tags[i] }}}</td>
+				<td >{{{ status_tags[i] }}}</td>
 			{{/if}}
 			{{/columns}}
 		</tr>
@@ -24,13 +34,17 @@
 <script>
 	component.exports = {
 		onrender: function () {
-			//alert( 'initing component' );
+			console.log( 'Table list rendered!');
+			this.on( 'entryClicked', function (event) {
+				console.log( 'entryClicked', event );
+				this.fire( 'selectEntry', { "id" : event.context["id"] } );
+			});
 		},
-		isolated: true,
-		/* Test Data */
-		data: function() {
+		isolated: true
+		/* Test Data
+		,data: function() {
 			return {
-				/* TODO change columsn from keys to indizes */
+				// TODO change columsn from keys to indizes
 				'columns' : { 'id' : "Id",
 											'author' : "Author",
 											 'original_title' : "Original Title",

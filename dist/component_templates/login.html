@@ -56,16 +56,15 @@
 
 			this.on( 'onSubmit', function (event) {
 				console.log( 'Submit Event!', event );
-				var loginFunction = this.get('loginFunction');
-				if(typeof loginFunction !== 'undefined'){
-					loginFunction(this.get('user'), this.get('pw'));
-				}else{
-					throw new SyntaxError("Login function is not defined!");
-				}
+
+				this.fire( 'login', {"user" : this.get('user'), "pw" : this.get('pw')} );
+
 				this.set({
 					'user' : '',
 					'pw' : ''
 				});
+
+				return false;
 			});
 
 		},

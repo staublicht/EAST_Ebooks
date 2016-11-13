@@ -1,7 +1,38 @@
 <link rel='ractive' href='alert.html?v=1' name='r-alert'>
 <link rel='ractive' href='login.html?v=1' name='r-login'>
 
+<h1 class="">Ebooks Database</h1>
+
 {{#alerts}}
 <r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
 {{/alerts}}
 <r-login />
+
+<r-footer></r-footer>
+
+<script>
+	component.exports = {
+		onrender: function () {
+
+			this.on( 'r-login.login', function (event) {
+				console.log( 'Login Event!', event );
+
+				var loginFunction = this.get('loginFunction');
+				if(typeof loginFunction !== 'undefined'){
+					loginFunction(event.user, event.pw);
+				}else{
+					throw new SyntaxError("Login function is not defined!");
+				}
+
+				return false;
+			});
+
+		},
+		data: function() {
+			return {
+				user : '',
+				pw : ''
+			};
+		}
+	};
+</script>

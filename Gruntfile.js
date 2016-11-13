@@ -104,7 +104,7 @@ module.exports = function (grunt) {
 				banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
 				'<%= grunt.template.today("yyyy-mm-dd") %> */',
 				compress: {
-					dead_code: true
+					//dead_code: true
 				}
 
 			},

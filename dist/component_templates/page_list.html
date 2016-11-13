@@ -23,9 +23,79 @@
 <r-pagination></r-pagination>
 
 <r-table
-	status_tags={{status_tags}}
+	status_tags={{status_tags}} columns={{table_columns}} entries={{table_entries}}
 ></r-table>
 
 <r-pagination></r-pagination>
 
 <r-footer></r-footer>
+
+
+<script>
+	component.exports = {
+		onrender: function () {
+			console.log( 'List Page loaded.');
+
+			//select entry to edit
+			this.on( 'r-table.selectEntry', function (event) {
+				console.log( 'selectEntry', event );
+				var loadPage = this.get('loadPage');
+
+				if(typeof loadPage !== 'undefined'){
+					loadPage( this.get('edit_page') , this.get('table_entries.'+ 1 ) );
+				}else{
+					throw new SyntaxError("loadPage is not defined!");
+				}
+
+				return false;
+			});
+
+			//TODO add observers for filters
+
+			//function calls to request list entries from server
+
+		},
+		data: function() {
+			return {
+				"selectedLang" : -1,
+				"selectedCat" : -1,
+				"selectedStatus" : -1,
+				"table_columns" : {
+					'id' : "Id",
+					'author' : "Author",
+					 'original_title' : "Original Title",
+					 'language' : "Language",
+					 'status' : "Status",
+					 'release_date' : "Release Date",
+					 'downloads' : "Downloads"
+				},
+				'table_entries' : [
+					{ 'id' : 101 ,
+					 'author' : 'Patrisiýa Jon',
+					 'original_title' : 'Star of Light',
+					 'language' : 'Turkmen',
+					 'status' : 0,
+					 'release_date' : '-',
+					 'downloads' : '-'
+					},
+					{ 'id' : 102 ,
+					 'author' : 'Patrisiýa Jon',
+					 'original_title' : 'Star of Light',
+					 'language' : 'Turkmen',
+					 'status' : 2,
+					 'release_date' : '-',
+					 'downloads' : '-'
+					},
+					{ 'id' : 103 ,
+					 'author' : 'Patrisiýa Jon',
+					 'original_title' : 'Star of Light',
+					 'language' : 'Turkmen',
+					 'status' : 3,
+					 'release_date' : '-',
+					 'downloads' : '-'
+					}
+				]
+			};
+		}
+	};
+</script>
