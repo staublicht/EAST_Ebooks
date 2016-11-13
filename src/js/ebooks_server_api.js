@@ -9,13 +9,36 @@ var server_url, load, return_data;
 server_url = "api.php";
 
 function makeRequest(type, send_data) {
-	var deferred, action_type_json;
+	var deferred, action_type_json, data;
 	deferred = $.Deferred();
-	action_type_json = { 'action': type };
+
+
+	switch (type) {
+	case 'load':
+		action_type_json = { 'function': type };
+		break;
+	case 'save':
+		action_type_json = { 'function': type };
+		break;
+	case 'login':
+		action_type_json = {
+			'function': 'session',
+			'session' : 'login',
+			'login' : 'username',
+			'login' : 'password'
+		};
+		break;
+	default:
+		console.log("Not a valid Ebooks Server Request", type);
+		break;
+	}
+
+	data = $.extend(action_type_json, send_data);
+	//data = JSON.stringify(data);
 
 	$.post(server_url + '?v=' + Math.floor(Math.random() * 500),
-				 $.extend(action_type_json, send_data)
-				).done(function (return_data) {
+		data
+		).done(function (return_data) {
 		console.log("Server Request successful.", return_data);
 		deferred.resolve(return_data);
 	}).fail(function (e) {
@@ -28,4 +51,4 @@ function makeRequest(type, send_data) {
 
 exports.load = function (send_data) { return makeRequest('load', send_data); };
 exports.save = function (send_data) { return makeRequest('save', send_data); };
-exports.login = function (user, pw) { return makeRequest('login', { 'user' : user, 'pw' : pw }); };
+exports.login = function (user, pw) { return makeRequest('login', { 'username' : user, 'password' : pw }); };

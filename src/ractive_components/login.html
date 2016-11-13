@@ -35,7 +35,7 @@
 </style>
 
 
-<form class="form-signin" action="#" method="get">
+<form class="form-signin" action="#" method="get" on-submit="onSubmit">
 	<h2 class="form-signin-heading">Please sign in</h2>
 	<label for="inputEmail" class="sr-only">User name</label>
 	<input type="text" id="username" class="form-control" placeholder="User Name" required autofocus value='{{user}}'>
@@ -46,7 +46,7 @@
 			<input type="checkbox" value="remember-me"> Remember me
 		</label>
 	</div>
-	<button class="btn btn-lg btn-primary btn-block" on-click="onSubmit" type="submit">Sign in</button>
+	<button class="btn btn-lg btn-primary btn-block"  type="submit">Sign in</button>
 </form>
 
 
@@ -56,6 +56,9 @@
 
 			this.on( 'onSubmit', function (event) {
 				console.log( 'Submit Event!', event );
+
+				var user = this.get('user');
+				var pw = this.get('pw');
 
 				this.fire( 'login', {"user" : this.get('user'), "pw" : this.get('pw')} );
 

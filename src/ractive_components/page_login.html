@@ -17,7 +17,19 @@
 			this.on( 'r-login.login', function (event) {
 				console.log( 'Login Event!', event );
 
-				var loginFunction = this.get('loginFunction');
+				var alertFunction = this.get('showAlert');
+
+				if (event.user == "" || event.pw == "") {
+					alertFunction('warning',"Missing user name or password.", true);
+					return false;
+				}
+
+				if (event.user.length > 50 || event.user.length > 50) {
+					alertFunction('warning',"User name or password to long.", true);
+					return false;
+				}
+
+				var loginFunction = this.get('serverLogin');
 				if(typeof loginFunction !== 'undefined'){
 					loginFunction(event.user, event.pw);
 				}else{

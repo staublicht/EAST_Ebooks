@@ -9,6 +9,12 @@
 <r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
 {{/alerts}}
 
+<h1>Edit Book {{id}}</h1>
+
+<div class="row">
+	<div class="column"></div>
+	<div class="column"></div>
+</div>
 <form>
 	<div class="form-group mt-1 mr-1">
 		<input class="form-control" type="search" placeholder="Search" id="example-search-input">
@@ -36,6 +42,18 @@
 			console.log( 'Edit Page loaded.');
 
 			//
+		},
+		data: function() {
+			return {
+				// Testdata
+				'id' : 101 ,
+				 'author' : 'Patrisiýa Jon',
+				 'original_title' : 'Star of Light',
+				 'language' : 'Turkmen',
+				 'status' : 0,
+				 'release_date' : '-',
+				 'downloads' : '-'
+			};
 		}
 	};
 </script>

@@ -53,10 +53,14 @@ function serverLogin(user, pw) {
 	EbookServer.login(user, pw).then(function (return_data) {
 		console.log("API Login Request:", return_data);
 		return_data = JSON.parse(return_data);
-		if (return_data.login_state) {
-			console.log("login state:", return_data.login_state);
-			app_data.login_state = return_data.login_state;
-			app_data.session_key = return_data.session_key;
+
+		return_data = $.isArray(return_data) ? return_data[0] : return_data;
+
+		console.log(return_data);
+		if (return_data.session) {
+			console.log("login session state:", return_data.session);
+			app_data.login_state = return_data.session;
+			//app_data.session_key = return_data.session_key;
 			loadPage(app_data.index_page);
 		} else {
 			if (app_data.current_page === app_data.login_page) {
@@ -69,6 +73,10 @@ function serverLogin(user, pw) {
 	});
 }
 
+function showAlert(type, content, dismissible) {
+	mainRactive.merge('alerts', [{ 'type' : type, 'content' : content, 'dismissible' : dismissible}]);
+}
+
 function init() {
 	"use strict";
 
@@ -78,11 +86,8 @@ function init() {
 	helpers = Ractive.defaults.data;
 	Ractive.load.baseUrl = app_data.component_base_url;
 
-	helpers.showAlert = function (type, content, dismissible) {
-		return false;
-	};
-
-	helpers.loginFunction = serverLogin;
+	helpers.showAlert = showAlert;
+	helpers.serverLogin = serverLogin;
 	helpers.loadPage = loadPage;
 
 	loadPage(app_data.index_page);
