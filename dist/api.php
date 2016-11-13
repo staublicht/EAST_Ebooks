@@ -2,6 +2,18 @@
 
 require ( 'init.php' );
 
+// register session function
+$function = array(
+    'session' => array(
+        'login' => array(
+            'username' => array(),
+            'password' => array()
+            ),
+        'logout' => array()
+        )
+);
+$api->addFunction( $function );
+
 // register account function
 $function = array(
     'account' => array(
@@ -33,18 +45,41 @@ $function = array(
 );
 $api->addFunction( $function );
 
-$api->addOutput( array( 'session' => $session->status ) );
+//$api->addOutput( array( 'session' => $session->status ) );
 
 
 /* Static Test Data ***
-$_POST['function'] = 'ebooks';
-$_POST['ebooks'] = 'get';
-$_POST['get'] = 'id';
-$_POST['id'] = 1;
+$_POST['function'] = 'session';
+$_POST['session'] = 'login';
+$_POST['login'] = 'username';
+$_POST['login'] = 'password';
+$_POST['username'] = 'asdf';
+$_POST['password'] = '1234';
 ***/
 
 $api->isValidRequest();
 
-$result = $mysql->select( $_POST['function'], $_POST['id'] );
+if( $_POST['function'] == 'session' )
+{
 
-$api->addOutput( $result );
+    if( $_POST['session'] == 'login' )
+    {
+        
+        $api->addOutput( array( 'session' => true ) );
+
+    }
+
+    if( $_POST['session'] == 'logout' )
+    {
+        
+        $api->addOutput( array( 'session' => false ) );
+
+    }
+
+}
+
+//$result = $mysql->select( $_POST['function'], $_POST['id'] );
+
+//$api->addOutput( $result );
+
+
