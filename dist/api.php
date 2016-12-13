@@ -2,6 +2,8 @@
 
 require ( 'init.php' );
 
+echo '<pre>';
+
 // register session function
 $function = array(
     'session' => array(
@@ -45,41 +47,36 @@ $function = array(
 );
 $api->addFunction( $function );
 
-//$api->addOutput( array( 'session' => $session->status ) );
-
-
 /* Static Test Data ***
 $_POST['function'] = 'session';
 $_POST['session'] = 'login';
 $_POST['login'] = 'username';
 $_POST['login'] = 'password';
-$_POST['username'] = 'asdf';
-$_POST['password'] = '1234';
+$_POST['username'] = 'admin';
+$_POST['password'] = 'admin';
 ***/
 
+// validate incoming $_POST request
 $api->isValidRequest();
 
+// handle session tasks
 if( $_POST['function'] == 'session' )
 {
 
     if( $_POST['session'] == 'login' )
     {
-        
-        $api->addOutput( array( 'session' => true ) );
+
+        $mysql->login( $session->login( $mysql->selectUsers() ) );
 
     }
 
     if( $_POST['session'] == 'logout' )
     {
         
-        $api->addOutput( array( 'session' => false ) );
+        $mysql->logout( $session->logout() );
 
     }
 
 }
 
-//$result = $mysql->select( $_POST['function'], $_POST['id'] );
-
-//$api->addOutput( $result );
-
-
+$api->addOutput( array( 'session' => $session->status ) );

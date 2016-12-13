@@ -22,6 +22,38 @@ class mysql
 
     }
 
+    public function login( $user = false )
+    {
+
+        if( $user )
+        {
+
+            $statement = $this->connection->prepare( "UPDATE users SET session_id = ? WHERE id = ?" );
+
+            $statement->bind_param("si", session_id(), $user);
+
+            $result = $statement->execute();
+
+        }
+
+    }
+
+    public function logout( $user = false )
+    {
+
+        if( $user )
+        {
+
+            $statement = $this->connection->prepare( "UPDATE users SET session_id = '' WHERE id = ?" );
+
+            $statement->bind_param("i", $user);
+
+            $result = $statement->execute();
+
+        }
+
+    }
+    
     public function select( $table, $id, $selector = '*' )
     {
 
@@ -29,7 +61,18 @@ class mysql
 
         $result = $this->connection->query( $this->connection->real_escape_string( $query ) );
 
-        return $result->fetch_array(MYSQLI_ASSOC);
+        return $result;
+
+    }
+
+    public function selectUsers()
+    {
+
+        $query = "SELECT * FROM users";
+
+        $result = $this->connection->query( $this->connection->real_escape_string( $query ) );
+
+        return $result;
 
     }
 
