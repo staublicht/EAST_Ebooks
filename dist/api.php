@@ -1,80 +1,37 @@
-<?php define ( 'master', true );
+<?php define( 'master', true );
 
-require ( 'init.php' );
+require( 'init.php' );
 
-echo '<pre>';
+require( 'register.php' );
 
-// register session function
-$function = array(
-    'session' => array(
-        'login' => array(
-            'username' => array(),
-            'password' => array()
-            ),
-        'logout' => array()
-        )
-);
-$api->addFunction( $function );
 
-// register account function
-$function = array(
-    'account' => array(
-        'get' => array(
-            'id' => array(),
-            'username' => array()
-            ),
-        'post' => array(
-            'id'
-            ),
-        'update' => array(
-            'id'
-            ),
-        'delete' => array(
-            'id'
-            )
-        )
-);
-$api->addFunction( $function );
+/*** TEST DATA ***/
 
-// register ebooks function
-$function = array(
-    'ebooks' => array(
-        'get' => array(
-            'id' => array(),
-            'username' => array()
-            )
-        )
-);
-$api->addFunction( $function );
+// Example:
+// $_POST['request'] = '{"session":{"login":{"username":"","password":""}}}';
 
-/* Static Test Data ***
-$_POST['function'] = 'session';
-$_POST['session'] = 'login';
-$_POST['login'] = 'username';
-$_POST['login'] = 'password';
-$_POST['username'] = 'admin';
-$_POST['password'] = 'admin';
-***/
+/*** END TEST DATA ***/
 
-// validate incoming $_POST request
-$api->isValidRequest();
+
+// validate JSON input
+if( isset( $_POST['request'] ) )
+    $request = $api->sanitize( json_decode( $_POST['request'] ) );
 
 // handle session tasks
-if( $_POST['function'] == 'session' )
+if( isset( $request->session ) )
 {
 
-    if( $_POST['session'] == 'login' )
+    if( isset( $request->session->login ) )
     {
-
-        $mysql->login( $session->login( $mysql->selectUsers() ) );
-
+        $username = $request->session->login->username;
+        $password = $request->session->login->password;
+        $users = $mysql->selectUsers();
+        $mysql->login( $session->login( $users, $username, $password ) );
     }
 
-    if( $_POST['session'] == 'logout' )
+    if( isset( $request->session->logout ) )
     {
-        
         $mysql->logout( $session->logout() );
-
     }
 
 }

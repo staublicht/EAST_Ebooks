@@ -1,4 +1,4 @@
-<?php if ( !defined ( 'master' ) ) die ( header ( 'HTTP/1.0 404 Not Found' ) );
+<?php if( !defined( 'master' ) ) die( header( 'HTTP/1.0 404 Not Found' ) );
 
 class session
 {
@@ -26,16 +26,16 @@ class session
 
     }
 
-    public function login( $users )
+    public function login( $users, $username, $password )
     {
 
         while( $user = $users->fetch_object() )
         {
 
-            if( strtolower ( $user->username ) == strtolower ( $_POST['username'] ) )
+            if( strtolower ( $user->username ) == strtolower ( $username ) )
             {
 
-                if( password_verify( $_POST['password'], $user->password ) ) {
+                if( password_verify( $password, $user->password ) ) {
 
                     foreach ( $user as $key=>$value ) {
                         $_SESSION['user'][$key] = $value;

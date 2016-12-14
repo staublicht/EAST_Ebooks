@@ -1,10 +1,10 @@
-<?php if ( !defined ( 'master' ) ) die ( header ( 'HTTP/1.0 404 Not Found' ) );
+<?php if( !defined( 'master' ) ) die( header( 'HTTP/1.0 404 Not Found' ) );
 
 class api
 {
 
-    // legit key structure for incomming $_POST
-    public $functions = array();
+    // expectable JSON objects
+    public $actions = NULL;
     // collection for JSON output on destruct
     private $output = array();
 
@@ -16,9 +16,12 @@ class api
     /*
      * Add expected $_POST structure to whitelist
      */
-    public function addFunction( $index )
+    public function addFunction( $actions )
     {
-        array_push( $this->functions, $index );
+        foreach( $actions as $key => $value )
+        {
+            $this->actions->$key = $value;
+        }
     }
 
     /*
@@ -31,63 +34,53 @@ class api
 
     /*
      * Check if incomming $_POST request
-     * matches whitelisted functions structure
+     * matches whitelisted actions structure
      */
-    public function isValidRequest()
+    public function sanitize( $input = false )
     {
 
-        $status = false;
-
-        if( isset( $_POST['function'] ) )
+        function whitelist( $input, $structure )
         {
-            $request = $_POST;
-            unset( $request['function'] );
-        } else {
-            return false;
-        }
 
-        /*
-         * Parse whitelist against request
-         */
-        function parse_whitelist( $request, $structure )
-        {
-            $status = false;
+            $result = false;
 
-            foreach( $structure as $structureKey => $structureValue ) {
-
-                foreach ($request as $requestKey => $requestValue) {
-
-                    if( $requestKey == $structureKey )
+            foreach( $structure as $structureKey => $structureValue )
+            {
+                foreach ($input as $inputKey => $inputValue)
+                {
+                    if( $inputKey == $structureKey )
                     {
 
-                        if( in_array( false, $structure ) ) // found end = success
+                        if( is_object( $inputValue ) )
                         {
-                            $status = true;
+
+                            $result->$inputKey = whitelist( $inputValue, $structureValue );
+
+                        }
+                        else if( is_string( $inputValue ) || is_bool( $inputValue ) )
+                        {
+
+                            $result->$inputKey = $inputValue;
+
                         }
                         else
                         {
-                            unset( $request[$requestKey] );
-                            $status = parse_whitelist( $request, $structure[$structureKey] );
+
+                            $result = false;
+
                         }
 
                     }
-
                 }
-
             }
 
-            return $status;
-        }
-
-        foreach ($this->functions as $function) {
-
-            $status = parse_whitelist( $request, $function );
-            if( $status == true )
-                return true;
+            return $result;
 
         }
 
-        exit;
+        $result = whitelist( $input, $this->actions );
+            
+        return $result;
 
     }
 
