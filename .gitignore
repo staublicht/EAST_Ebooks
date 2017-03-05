@@ -3,6 +3,7 @@
 # -------------------------
 
 config.php
+input.php
 
 # ignore all files starting with . or ~, like .htaccess
 .*

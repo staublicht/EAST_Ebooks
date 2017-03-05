@@ -1,11 +1,19 @@
 <?php if( !defined( 'master' ) ) die( header( 'HTTP/1.0 404 Not Found' ) );
 
+/**
+ * Class api
+ */
 class api
 {
 
-    // expectable JSON objects
+    /*
+     * expectable JSON objects
+     */
     public $actions = NULL;
-    // collection for JSON output on destruct
+
+    /*
+     * array collection for JSON output on destruct
+     */
     private $output = array();
 
     function __destruct()
@@ -13,8 +21,9 @@ class api
         echo json_encode( $this->output );
     }
 
-    /*
+    /**
      * Add expected $_POST structure to whitelist
+     * @param $actions
      */
     public function addFunction( $actions )
     {
@@ -24,17 +33,20 @@ class api
         }
     }
 
-    /*
+    /**
      * Add array $output to JSON output
+     * @param array $output
      */
     public function addOutput( $output = array() )
     {
         array_push( $this->output, $output );
     }
 
-    /*
+    /**
      * Check if incomming $_POST request
      * matches whitelisted actions structure
+     * @param bool $input
+     * @return bool
      */
     public function sanitize( $input = false )
     {

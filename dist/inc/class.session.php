@@ -1,10 +1,19 @@
 <?php if( !defined( 'master' ) ) die( header( 'HTTP/1.0 404 Not Found' ) );
 
+/**
+ * Class session
+ */
 class session
 {
 
+    /*
+     * session status
+     */
     public $status;
 
+    /**
+     * session constructor.
+     */
     function __construct()
     {
 
@@ -26,6 +35,12 @@ class session
 
     }
 
+    /**
+     * @param $users
+     * @param $username
+     * @param $password
+     * @return bool
+     */
     public function login( $users, $username, $password )
     {
 
@@ -37,7 +52,8 @@ class session
 
                 if( password_verify( $password, $user->password ) ) {
 
-                    foreach ( $user as $key=>$value ) {
+                    foreach( $user as $key=>$value )
+                    {
                         $_SESSION['user'][$key] = $value;
                     }
 
@@ -56,8 +72,12 @@ class session
         return false;
 
     }
-    
-    public function logout() {
+
+    /**
+     * @return mixed
+     */
+    public function logout()
+    {
 
         if( isset( $_SESSION['user']['id'] ) )
         {

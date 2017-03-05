@@ -5,19 +5,16 @@ require( 'init.php' );
 require( 'register.php' );
 
 
-/*** TEST DATA ***/
-
-// Example:
-// $_POST['request'] = '{"session":{"login":{"username":"","password":""}}}';
-
-/*** END TEST DATA ***/
-
-
-// validate JSON input
+/*
+ * validate JSON input
+ */
 if( isset( $_POST['request'] ) )
     $request = $api->sanitize( json_decode( $_POST['request'] ) );
 
-// handle session tasks
+
+/*
+ * handle session tasks
+ */
 if( isset( $request->session ) )
 {
 
@@ -35,5 +32,20 @@ if( isset( $request->session ) )
     }
 
 }
+
+
+/*
+ * handle account tasks
+ */
+if( isset( $request->account ) )
+{
+
+    if( isset( $request->account->id ) )
+    {
+
+    }
+
+}
+
 
 $api->addOutput( array( 'session' => $session->status ) );
