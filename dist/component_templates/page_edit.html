@@ -1,3 +1,14 @@
+<style type="text/css">
+	h3 {
+		border-bottom: 2px solid #ccc;
+		line-height: 1.5;
+	}
+	label {
+		color: #818a91 !important;
+	}
+</style>
+
+
 <link rel='ractive' href='navbar.html?v=1' name='r-navbar'>
 <link rel='ractive' href='dropdownbtnall.html?v=1' name='r-dropdown'>
 <link rel='ractive' href='footer.html?v=1' name='r-footer'>
@@ -5,33 +16,112 @@
 <r-navbar entries={{menu.entries}} selected_index={{menu.selected_index}}>
 </r-navbar>
 
-{{#alerts}}
-<r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
-{{/alerts}}
-
-<h1>Edit Book {{id}}</h1>
-
 <div class="row">
-	<div class="column"></div>
-	<div class="column"></div>
+	<div class="col-md-9">
+		<h1 class="pt-2">Edit Book {{id}}
+		<small class="h6 align-middle">{{{status_tags[status]}}}</small>
+		<a href="#" class="btn btn-secondary btn-sm" role="button">Unpublish</a>
+		</h1>
+	</div>
+	<div class="col-md-3">
+		<a href="" class="btn btn-danger">Delete</a>
+	</div>
 </div>
+
+{{#if alerts}}
+<r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
+{{else}}
+<p class="text-muted">No warnings.</p>
+{{/if}}
+
 <form>
-	<div class="form-group mt-1 mr-1">
-		<input class="form-control" type="search" placeholder="Search" id="example-search-input">
-		<button class="btn btn-secondary" type="submit">Search</button>
+<div class="row">
+	<div class="col-lg-8">
+		<h3>Basic Information</h3>
+		<div class="row form-group">
+			<div class="col-md-4">
+				<label for="author-txt">Author (required) </label>
+				<input id="author-txt" class="form-control" type="text" required value="{{author}}" maxlength="30" />
+			</div>
+			<div class="col-md-4">
+				<label for="author-txt">Title (required) </label>
+				<input id="author-txt" class="form-control" type="text" required value="{{title}}" maxlength="30" />
+			</div>
+			<div class="col-md-4">
+				<label for="author-txt">Original Title </label>
+				<input id="author-txt" class="form-control" type="text" required value="{{original_title}}" maxlength="30" />
+			</div>
+		</div>
+		<div class="row form-group">
+			<div class="col-md-4">
+				<label for="author-txt">Language (required) </label>
+				<input id="author-txt" class="form-control" type="text" required value="{{language}}" maxlength="30" />
+			</div>
+			<div class="col-md-4">
+				<label for="author-txt">Year of first Publication </label>
+				<input id="author-txt" class="form-control" type="text" value="{{year}}" maxlength="30" />
+			</div>
+			<div class="col-md-4">
+				<label for="author-txt">ePub release date </label>
+				<input id="author-txt" class="form-control" type="text" disabled value="{{release_date}}" maxlength="30" />
+			</div>
+		</div>
+		<div class="row form-group">
+			<div class="col-md-4">
+				<label for="author-txt">Publisher </label>
+				<input id="author-txt" class="form-control" type="text" value="{{publisher}}" maxlength="30" />
+			</div>
+			<div class="col-md-4">
+				<label for="author-txt">ISBN </label>
+				<input id="author-txt" class="form-control" type="text" value="{{isbn}}" maxlength="30" />
+			</div>
+			<div class="col-md-4">
+				<label for="author-txt">Last edited </label>
+				<input id="author-txt" class="form-control" type="text" disabled value="{{edit_date}}" maxlength="30" />
+			</div>
+		</div>
+		<h3>Content
+			&nbsp;<a href="#" class="btn btn-secondary btn-sm">Upload File</a>
+			&nbsp;<a href="#" class="btn btn-secondary btn-sm">Add Amazon</a>
+			&nbsp;<a href="#" class="btn btn-secondary btn-sm">Add Yumpu</a>
+		</h3>
+
+		<h3>Additional Information
+		</h3>
+		<div class="formgroup">
+			<label for="cover-txt">Back Cover Text / Description (1000 characters max) </label>
+			<textarea id="cover-txt" class="form-control" rows="4" value="{{cover_txt}}" maxlength="1000" />
+		</div>
+		<div class="formgroup">
+			<label for="keywords-txt">Additional keywords (comma separated, 200 characters max)  </label>
+			<textarea id="keywords-txt" class="form-control" rows="3" value="{{keywords}}"  maxlength="200" />
+		</div>
+		<h3>Security Level</h3>
+		<fieldset class="form-group">
+			<div class="form-check">
+				<label class="form-check-label">
+					<input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+					Option one is this and that&mdash;be sure to include why it's great
+				</label>
+			</div>
+			<div class="form-check">
+			<label class="form-check-label">
+					<input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
+					Option two can be something else and selecting it will deselect option one
+				</label>
+			</div>
+			<div class="form-check disabled">
+			<label class="form-check-label">
+					<input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
+					Option three is disabled
+				</label>
+			</div>
+		</fieldset>
 	</div>
-	<div class="form-group mt-1 mr-1">
-		Language
-		<r-dropdown selectedIndex={{selectedLang}} listOptions={{languages}} />
+	<div class="col-lg-4">
+		<h3>Categories</h3>
 	</div>
-	<div class="form-group mt-1 mr-1">
-		Category
-		<r-dropdown selectedIndex={{selectedCat}} listOptions={{categories}} />
-	</div>
-	<div class="form-group mt-1 mr-1">
-		Status
-		<r-dropdown selectedIndex={{selectedStatus}} listOptions={{status_tags}} />
-	</div>
+</div>
 </form>
 
 <r-footer></r-footer>

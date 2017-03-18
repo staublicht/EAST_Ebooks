@@ -1,5 +1,5 @@
 {
-	"login_state" : false,
+	"login_state" : true,
 	"session_key" : "false",
 	"target_element" : "#ractive_page",
 	"page_title" : "Ebooks Management",
@@ -25,7 +25,7 @@
 		'page_edit.html'
 	],
 	"login_page" : 0,
-	"index_page" : 1,
+	"index_page" : 2,
 	"edit_page" : 2,
 	"current_page" : 0,
 	"component_base_url" : 'component_templates/',
