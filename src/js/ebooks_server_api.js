@@ -9,31 +9,31 @@ var server_url, load, return_data;
 server_url = "api/index.php";
 
 function makeRequest(type, send_data) {
-	var deferred, action_type_json, data;
+	var deferred, data;
 	deferred = $.Deferred();
 
 
 	switch (type) {
 		case 'load':
-			action_type_json = { type };
+			data = { type : send_data };
 			break;
 		case 'save':
-			action_type_json = { type };
+			data = { type : send_data };
 			break;
 		case 'login':
-			action_type_json = {
+			data = {
 				'session' : {
 					'login' : {
-						'username' : '',
-						'password' : ''
+						'username' : send_data.user,
+						'password' : send_data.pw
 					}
 				}
 			};
 			break;
 		case 'logout':
-            action_type_json = {
+            data = {
                 'session' : {
-                    'logout' : true
+                    'logout' : 'true'
                 }
 			};
 			break;
@@ -42,7 +42,7 @@ function makeRequest(type, send_data) {
 			break;
 	}
 
-	data = $.extend( action_type_json, send_data);
+	//data = $.extend( action_type_json, send_data);
 	//data = JSON.stringify(data);
 
 	$.post(server_url + '?v=' + Math.floor(Math.random() * 500),
@@ -68,13 +68,10 @@ exports.save = function (send_data) {
 
 exports.login = function (user, pw) {
 	return makeRequest('login', {
-		'session' : {
-			'login' : {
-				'username' : user,
-				'password' : pw
-			}
+			'user' : user,
+			'pw' : pw
 		}
-	});
+	);
 };
 
 exports.logout = function () {
