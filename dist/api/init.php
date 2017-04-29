@@ -3,13 +3,13 @@
 /*
  * if possible get input from file
  */
-if( is_file( './input.php' ) )
-    require_once( './input.php' );
+if( is_file( 'config/input.php' ) )
+    require_once( 'config/input.php' );
 
 /*
  * load configuration
  */
-$config = require_once( 'config.php' );
+$config = require_once('config/config.php');
 if( !$config )
     die( 'Configuration not found' );
 
@@ -17,25 +17,25 @@ if( !$config )
 /*
  * load debug functions
  */
-require_once( 'inc/debug.php' );
+require_once('config/debug.php');
 
 
 /*
  * load and initialize api class
  */
-require_once( 'inc/class.api.php' );
+require_once('classes/class.api.php');
 $api = new api;
 
 
 /*
  * load and initialize mysql connection
  */
-require_once( 'inc/class.mysql.php' );
+require_once('classes/class.mysql.php');
 $mysql = new mysql;
 
 
 /*
  * load and initialize session
  */
-require_once( 'inc/class.session.php' );
+require_once('classes/class.session.php');
 $session = new session;

@@ -1,8 +1,8 @@
 <?php define( 'master', true );
 
-require( 'init.php' );
+require('init.php');
 
-require( 'register.php' );
+require('config/register.php');
 
 
 /*

@@ -2,8 +2,9 @@
 # Exclude all files with passwords, user related data, or are system files
 # -------------------------
 
-config.php
-input.php
+# ignore api config files with sensitive data
+api/config/config.php
+api/config/input.php
 
 # ignore all files starting with . or ~, like .htaccess
 .*
