@@ -26,7 +26,7 @@
 	"login_page" : 0,
 	"index_page" : 2,
 	"edit_page" : 2,
-	"current_page" : 0,
+	"current_page" : -1,
 	"languages" : ["English", "Turkmen", "Farsi"],
 	"categories" : ["Family"],
 	"status_tags" : [

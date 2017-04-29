@@ -53,12 +53,6 @@ function loadPage(page_id, page_data) {
 
 function serverLogin(user, pw) {
 	EbookServer.login(user, pw).then(function (return_data) {
-		console.log("API Login Request:", return_data);
-		return_data = JSON.parse(return_data);
-
-		return_data = $.isArray(return_data) ? return_data[0] : return_data;
-
-		console.log(return_data);
 		if (return_data.session) {
 			console.log("login session state:", return_data.session);
 			app_data.login_state = return_data.session;
@@ -92,7 +86,7 @@ function init() {
 	helpers.serverLogin = serverLogin;
 	helpers.loadPage = loadPage;
 
-	loadPage(app_data.index_page);
+    serverLogin();
 
 	window.addEventListener('popstate', browserHistoryChange);
 }

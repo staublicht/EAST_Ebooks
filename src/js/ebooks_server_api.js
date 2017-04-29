@@ -3,53 +3,20 @@
 */
 
 var $ = require('jquery');
+var server_url = "api/index.php";
 
-var server_url, load, return_data;
+function makeRequest(data) {
+	var deferred = $.Deferred();
 
-server_url = "api/index.php";
-
-function makeRequest(type, send_data) {
-	var deferred, data;
-	deferred = $.Deferred();
-
-
-	switch (type) {
-		case 'load':
-			data = { type : send_data };
-			break;
-		case 'save':
-			data = { type : send_data };
-			break;
-		case 'login':
-			data = {
-				'session' : {
-					'login' : {
-						'username' : send_data.user,
-						'password' : send_data.pw
-					}
-				}
-			};
-			break;
-		case 'logout':
-            data = {
-                'session' : {
-                    'logout' : 'true'
-                }
-			};
-			break;
-		default:
-			console.log("Not a valid Ebooks Server Request", type);
-			break;
-	}
-
-	//data = $.extend( action_type_json, send_data);
-	//data = JSON.stringify(data);
-	console.log( 'data: ', data );
+	//data doesn't need to be converted to JSOn, this os done in Jquery.post
+    console.log("Server Request Data:", data);
 
 	$.post(server_url + '?v=' + Math.floor(Math.random() * 500),
 		data
 		).done(function (return_data) {
 		console.log("Server Request successful.", return_data);
+        return_data = JSON.parse(return_data);
+        return_data = $.isArray(return_data) ? return_data[0] : return_data; //hack needed in case data is wrapped in array
 		deferred.resolve(return_data);
 	}).fail(function (e) {
 		console.log("Server Request failed.", e);
@@ -59,22 +26,45 @@ function makeRequest(type, send_data) {
 	return deferred.promise();
 }
 
-exports.load = function (send_data) {
-	return makeRequest('load', send_data);
-};
-
-exports.save = function (send_data) {
-	return makeRequest('save', send_data);
-};
-
-exports.login = function (user, pw) {
-	return makeRequest('login', {
-			'user' : user,
-			'pw' : pw
-		}
-	);
-};
-
-exports.logout = function () {
-	return makeRequest('logout', {});
+function load(data) {
+    data = { "load" : data };
+    return makeRequest(data);
 }
+
+function save(data){
+    data = { "save" : data };
+    return makeRequest(data);
+}
+
+function getSession(){
+    return makeRequest({
+        'session': {
+            'login' : true
+        }
+    });
+}
+
+function login(user, pw){
+    return makeRequest({
+        'session': {
+            'login': {
+                'username': user,
+                'password': pw
+            }
+        }
+    });
+}
+
+function logout(){
+    return makeRequest({
+        'session' : {
+            'logout' : 'true'
+        }
+    });
+}
+
+exports.load = load;
+exports.save = save;
+exports.login = login;
+exports.logout = logout;
+exports.getSession = getSession;
