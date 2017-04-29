@@ -44,6 +44,7 @@ function makeRequest(type, send_data) {
 
 	//data = $.extend( action_type_json, send_data);
 	//data = JSON.stringify(data);
+	console.log( 'data: ', data );
 
 	$.post(server_url + '?v=' + Math.floor(Math.random() * 500),
 		data

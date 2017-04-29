@@ -90,7 +90,7 @@ class api
 
         }
 
-        $result = whitelist( $input, $this->actions );
+        $result = whitelist( json_decode( json_encode( $input ) ), $this->actions );
             
         return $result;
 

@@ -8,9 +8,8 @@ require('config/register.php');
 /*
  * validate JSON input
  */
-if( isset( $_POST['request'] ) )
-    $request = $api->sanitize( json_decode( $_POST['request'] ) );
-
+if( isset( $_POST ) )
+    $request = $api->sanitize( $_POST );
 
 /*
  * handle session tasks
