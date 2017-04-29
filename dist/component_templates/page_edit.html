@@ -13,7 +13,7 @@
 <link rel='ractive' href='dropdownbtnall.html?v=1' name='r-dropdown'>
 <link rel='ractive' href='footer.html?v=1' name='r-footer'>
 
-<r-navbar entries={{menu.entries}} selected_index={{menu.selected_index}}>
+<r-navbar id={{menu.id}} entries={{menu.entries}} selected_index={{menu.selected_index}}>
 </r-navbar>
 
 <div class="row">
@@ -44,18 +44,22 @@
 				<input id="author-txt" class="form-control" type="text" required value="{{author}}" maxlength="30" />
 			</div>
 			<div class="col-md-4">
-				<label for="author-txt">Title (required) </label>
-				<input id="author-txt" class="form-control" type="text" required value="{{title}}" maxlength="30" />
+				<label for="title-txt">Title (required) </label>
+				<input id="title-txt" class="form-control" type="text" required value="{{title}}" maxlength="30" />
 			</div>
 			<div class="col-md-4">
-				<label for="author-txt">Original Title </label>
-				<input id="author-txt" class="form-control" type="text" required value="{{original_title}}" maxlength="30" />
+				<label for="original-title-txt">Original Title </label>
+				<input id="original-title-txt" class="form-control" type="text" required value="{{original_title}}" maxlength="30" />
 			</div>
 		</div>
 		<div class="row form-group">
 			<div class="col-md-4">
-				<label for="author-txt">Language (required) </label>
-				<input id="author-txt" class="form-control" type="text" required value="{{language}}" maxlength="30" />
+				<label for="lang-select">Language (required) </label>
+				<select id="lang-select" class="custom-select">
+					{{#languages : i}}
+					<option value="{{i}}" {{# . === language}}selected{{/i}}>{{.}}</option>
+					{{/languages}}
+				</select>
 			</div>
 			<div class="col-md-4">
 				<label for="author-txt">Year of first Publication </label>
@@ -136,10 +140,10 @@
 		data: function() {
 			return {
 				// Testdata
-				'id' : 101 ,
-				 'author' : 'Patrisiýa Jon',
-				 'original_title' : 'Star of Light',
-				 'language' : 'Turkmen',
+				'id' : 0 ,
+				 'author' : 'Missing author',
+				 'original_title' : 'Missing title',
+				 'language' : 'missing language',
 				 'status' : 0,
 				 'release_date' : '-',
 				 'downloads' : '-'

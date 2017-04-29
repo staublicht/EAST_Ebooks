@@ -3,7 +3,7 @@
 	<ul class="nav navbar-nav">
 	{{#entries : i}}
 		<li class="nav-item {{# i === selected_index}}active{{/i}}">
-			<a class="nav-link" href="#" on-click="selection{{i}}">{{.}} {{# i === selected_index}}<span class="sr-only">(current)</span>{{/i}}</a>
+			<a class="nav-link" href="#" on-click="selection">{{value}} {{# i === selected_index}}<span class="sr-only">(current)</span>{{/i}}</a>
 		</li>
 	{{/entries}}
 </nav>
@@ -11,9 +11,23 @@
 
 <script>
 	component.exports = {
+		isolated: true,
 		onrender: function () {
-			//alert( 'initing component' );
-		},
-		isolated: true
+			console.log("Menu created:", this.get("id"));
+
+			//select entry to edit
+			this.on( 'selection', function (event) {
+				console.log( 'selectMenuEntry', event );
+				var loadPage = this.get('loadPage');
+
+				if(typeof loadPage !== 'undefined'){
+					loadPage( event.context["target_id"] );
+				}else{
+					throw new SyntaxError("loadPage is not defined!");
+				}
+
+				return false;
+			});
+		}
 	};
 </script>

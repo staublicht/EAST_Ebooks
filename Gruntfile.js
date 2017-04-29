@@ -1,9 +1,6 @@
 /*!
- * Bootstrap's Gruntfile
- * https://getbootstrap.com
- * Copyright 2013-2016 The Bootstrap Authors
- * Copyright 2013-2016 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * East Ebook Gruntfile
+ * Run to compile SCSS and javascript
  */
 
 module.exports = function (grunt) {

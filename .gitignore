@@ -3,8 +3,8 @@
 # -------------------------
 
 # ignore api config files with sensitive data
-api/config/config.php
-api/config/input.php
+dist/api/config/config.php
+dist/api/config/input.php
 
 # ignore all files starting with . or ~, like .htaccess
 .*

@@ -21,6 +21,8 @@ function handleError(e) {
 
 function loadPage(page_id, page_data) {
 
+	history.pushState({"page" : page_id}, app_data.pages[page_id].title, "");
+
 	if (typeof mainRactive.teardown !== "undefined") {
 		mainRactive.teardown();
 	}
@@ -30,7 +32,7 @@ function loadPage(page_id, page_data) {
 	//console.log("Hello" , data);
 
 	if (app_data.login_state && app_data.session_key) {
-		Ractive.load(app_data.pages[page_id]).then(function (RPage) {
+		Ractive.load(app_data.pages[page_id].template_file).then(function (RPage) {
 			mainRactive = new RPage({
 				el: app_data.target_element,
 				data: data
@@ -38,7 +40,7 @@ function loadPage(page_id, page_data) {
 			app_data.current_page = page_id;
 		});
 	} else {
-		Ractive.load(app_data.pages[app_data.login_page]).then(function (RPage) {
+		Ractive.load(app_data.pages[app_data.login_page].template_file).then(function (RPage) {
 			mainRactive = new RPage({
 				el: app_data.target_element,
 				data: data
@@ -82,7 +84,7 @@ function init() {
 
 	var helpers;
 
-	//global helper functions
+	//global functions, used instead of events
 	helpers = Ractive.defaults.data;
 	Ractive.load.baseUrl = app_data.component_base_url;
 
@@ -91,6 +93,16 @@ function init() {
 	helpers.loadPage = loadPage;
 
 	loadPage(app_data.index_page);
+
+	window.addEventListener('popstate', browserHistoryChange);
+}
+
+function browserHistoryChange(e) {
+	if (e.state) {
+		if (e.state.page) {
+			loadPage(e.state.page);
+		}
+	}
 }
 
 /* Init */

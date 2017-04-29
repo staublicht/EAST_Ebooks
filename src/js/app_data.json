@@ -4,13 +4,29 @@
 	"target_element" : "#ractive_page",
 	"page_title" : "Ebooks Management",
 	"menu" : {
+		"id" : "top_menu",
+		"location" : "top",
 		"entries" : [
-			"Books",
-			"Categories",
-			"Languages",
-			"Stats"],
+			{ "value" : "Books", "target_type" : 0, "target_id" : 1 },
+			{ "value" : "Categories", "target_type" : 0, "target_id" : 1 },
+			{ "value" : "Languages", "target_type" : 0, "target_id" : 1 },
+			{ "value" : "Users", "target_type" : 0, "target_id" : 1 },
+			{ "value" : "Stats", "target_type" : 0, "target_id" : 1 }
+		],
 		"selected_index" : 0
 	},
+	"menu_target_types" : [
+		"page"
+	],
+	"pages" : [ //order is important
+		{"id" : 0, "title" : "Login", "template_file" : "page_login.html"},
+		{"id" : 1, "title" : "Book List", "template_file" : "page_list.html"},
+		{"id" : 2, "title" : "Edit Book", "template_file" : "page_edit.html"}
+	],
+	"login_page" : 0,
+	"index_page" : 2,
+	"edit_page" : 2,
+	"current_page" : 0,
 	"languages" : ["English", "Turkmen", "Farsi"],
 	"categories" : ["Family"],
 	"status_tags" : [
@@ -19,15 +35,6 @@
 		'<span class="tag tag-pill tag-success">published</span>',
 		'<span class="tag tag-pill tag-default">blocked</span>'
 	],
-	"pages" : [
-		'page_login.html',
-		'page_list.html',
-		'page_edit.html'
-	],
-	"login_page" : 0,
-	"index_page" : 2,
-	"edit_page" : 2,
-	"current_page" : 0,
 	"component_base_url" : 'component_templates/',
 	"highlight_colour" : '#e89853'
 }

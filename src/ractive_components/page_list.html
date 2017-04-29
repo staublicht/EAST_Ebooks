@@ -4,7 +4,7 @@
 <link rel='ractive' href='table.html?v=1' name='r-table'>
 <link rel='ractive' href='footer.html?v=1' name='r-footer'>
 
-<r-navbar entries={{menu.entries}} selected_index={{menu.selected_index}}>
+<r-navbar id={{menu.id}} entries={{menu.entries}} selected_index={{menu.selected_index}}>
 </r-navbar>
 
 {{#alerts}}
@@ -42,7 +42,7 @@
 				var loadPage = this.get('loadPage');
 
 				if(typeof loadPage !== 'undefined'){
-					loadPage( this.get('edit_page') , this.get('table_entries.'+ 1 ) );
+					loadPage( this.get('edit_page') , this.get('table_entries.' + 2) );
 				}else{
 					throw new SyntaxError("loadPage is not defined!");
 				}
