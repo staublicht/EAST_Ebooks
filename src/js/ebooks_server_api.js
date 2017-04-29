@@ -8,7 +8,7 @@ var server_url = "api/index.php";
 function makeRequest(data) {
 	var deferred = $.Deferred();
 
-	//data doesn't need to be converted to JSOn, this os done in Jquery.post
+    JSON.stringify(data);
     console.log("Server Request Data:", data);
 
 	$.post(server_url + '?v=' + Math.floor(Math.random() * 500),
@@ -29,6 +29,17 @@ function makeRequest(data) {
 function load(data) {
     data = { "load" : data };
     return makeRequest(data);
+}
+
+function getTableData(table, limit, offset) {
+    var data = {};
+    data[table] = {
+        'get' : true,
+        'limit' : limit, //-1 = all
+        'offset' : offset
+    };
+    console.log(data);
+    //return makeRequest(data);
 }
 
 function save(data){
@@ -68,3 +79,4 @@ exports.save = save;
 exports.login = login;
 exports.logout = logout;
 exports.getSession = getSession;
+exports.getTableData = getTableData;

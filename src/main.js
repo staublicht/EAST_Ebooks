@@ -11,6 +11,7 @@ Ractive = require('ractive');
 Ractive.load = require('ractive-load');
 EbookServer = require('./js/ebooks_server_api.js');
 app_data = require('./js/app_data.json');
+PageModels = require('./js/page_data_models.js');
 mainRactive = new Ractive();
 
 //Error handling
@@ -19,7 +20,9 @@ function handleError(e) {
 	console.log(e);
 }
 
-function loadPage(page_id, page_data) {
+function loadPage(page_id, data_overrides) {
+
+    //TODO: sanity check
 
 	history.pushState({"page" : page_id}, app_data.pages[page_id].title, "");
 
@@ -27,7 +30,7 @@ function loadPage(page_id, page_data) {
 		mainRactive.teardown();
 	}
 
-	var data = $.extend({}, app_data, page_data);
+	data = PageModels.getPageData(page_id, data_overrides);
 
 	//console.log("Hello" , data);
 
@@ -59,14 +62,21 @@ function serverLogin(user, pw) {
 			//app_data.session_key = return_data.session_key;
 			loadPage(app_data.index_page);
 		} else {
-			if (app_data.current_page === app_data.login_page) {
-				mainRactive.set('alerts', [{ type : "warning", content : "Login Failed!", dismissible : false}]);
-				//TODO: handle Server not reachable? Should we have some possibility to work offline in future?
-			} else {
-				loadPage(app_data.login_page);
-			}
+            if (app_data.current_page !== app_data.login_page) {
+                loadPage(app_data.login_page);
+            } else {
+                mainRactive.set('alerts', [{type: "warning", content: "Login Failed!", dismissible: false}]);
+                //TODO: handle Server not reachable? Should we have some possibility to work offline in future?
+            }
 		}
 	});
+}
+
+function serverLogout(){
+    EbookServer.logout().then(function (return_data) {
+        console.log("login session state:", return_data.session);
+        loadPage(app_data.login_page);
+    });
 }
 
 function showAlert(type, content, dismissible) {
@@ -85,6 +95,7 @@ function init() {
 	helpers.showAlert = showAlert;
 	helpers.serverLogin = serverLogin;
 	helpers.loadPage = loadPage;
+	helpers.serverLogout = serverLogout;
 
     serverLogin();
 
@@ -102,6 +113,7 @@ function browserHistoryChange(e) {
 /* Init */
 init();
 
+/*
 //TEST component
 
 Ractive.load('test.html').then(function (Test_widget) {
@@ -141,3 +153,4 @@ function initTest() {
 	});
 
 }
+*/
