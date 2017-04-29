@@ -76,27 +76,62 @@ class mysql
     /**
      * @param $table
      * @param $id
-     * @param string $selector
+     * @param string $return_fields
      * @return bool|mysqli_result
      */
-    public function select( $table, $id, $selector = '*' )
+    public function select( $table, $return_fields = '*', $id = false, $limit = 10, $offset = 0, $sort = 'desc' )
     {
 
-        $query = "SELECT $selector FROM $table WHERE id = $id";
+        if( $return_fields == '*' )
+            $selector_string = '*';
 
-        $result = $this->connection->query( $this->connection->real_escape_string( $query ) );
+        else if( is_array( $return_fields ) )
+        {
 
-        return $result;
+            $selector_array = [];
 
-    }
+            $query = "SHOW COLUMNS FROM $table";
 
-    /**
-     * @return bool|mysqli_result
-     */
-    public function selectUsers()
-    {
+            $result = $this->connection->query( $this->connection->real_escape_string( $query ) );
 
-        $query = "SELECT * FROM users";
+            while( $data = $result->fetch_object() )
+                if( in_array($data->Field, $return_fields) )
+                    array_push( $selector_array, $data->Field );
+
+            $selector_string = implode( ', ', $selector_array );
+
+            if( $selector_string == '' )
+            {
+                $selector_string = 'null';
+                $limit = 0;
+            }
+
+        }
+
+        else
+        {
+            $selector_string = 'null';
+            $limit = 0;
+        }
+
+
+        $query = "SELECT $selector_string FROM $table";
+
+        if( is_int( $id ) )
+            $query .= " WHERE id = $id";
+
+        if( $limit !== -1 )
+        {
+
+            if( is_int( $limit ) )
+                if( $limit >= 0 )
+                    $query .= " LIMIT $limit";
+
+            if( is_int( $offset ) )
+                if( $offset >= 0 )
+                    $query .= " OFFSET $offset";
+
+        }
 
         $result = $this->connection->query( $this->connection->real_escape_string( $query ) );
 

@@ -64,23 +64,13 @@ class api
                     {
 
                         if( is_object( $inputValue ) )
-                        {
-
                             $result->$inputKey = whitelist( $inputValue, $structureValue );
 
-                        }
-                        else if( is_string( $inputValue ) || is_bool( $inputValue ) )
-                        {
-
+                        else if( is_string( $inputValue ) || is_int( $inputValue ) || is_bool( $inputValue ) || is_array( $inputValue ) )
                             $result->$inputKey = $inputValue;
 
-                        }
                         else
-                        {
-
                             $result = false;
-
-                        }
 
                     }
                 }
@@ -90,7 +80,7 @@ class api
 
         }
 
-        $result = whitelist( json_decode( json_encode( $input ) ), $this->actions );
+        $result = whitelist( json_decode( $input ), $this->actions );
             
         return $result;
 

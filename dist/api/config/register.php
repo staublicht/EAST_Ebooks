@@ -19,8 +19,9 @@ $actions->account->delete->id = null;
 /*
  * set ebooks actions
  */
-$actions->ebooks->get->id = null;
-$actions->ebooks->get->username = null;
+$actions->ebooks->get->limit = null;
+$actions->ebooks->get->offset = null;
+$actions->ebooks->get->return_fields = null;
 
 /*
  * register actions
