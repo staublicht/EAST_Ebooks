@@ -24,7 +24,7 @@
 		{"id" : 2, "title" : "Edit Book", "template_file" : "page_edit.html"}
 	],
 	"login_page" : 0,
-	"index_page" : 2,
+	"index_page" : 1,
 	"edit_page" : 2,
 	"current_page" : -1,
 	"languages" : ["English", "Turkmen", "Farsi"],
