@@ -30,11 +30,11 @@
 	"languages" : ["English", "Turkmen", "Farsi"],
 	"categories" : ["Family"],
 	"status_tags" : [
-		'<span class="tag tag-pill tag-danger">incomplete</span>',
-		'<span class="tag tag-pill tag-warning">ready</span>',
-		'<span class="tag tag-pill tag-success">published</span>',
-		'<span class="tag tag-pill tag-default">blocked</span>'
+		"<span class='tag tag-pill tag-danger'>incomplete</span>",
+		"<span class='tag tag-pill tag-warning'>ready</span>",
+		"<span class='tag tag-pill tag-success'>published</span>",
+		"<span class='tag tag-pill tag-default'>blocked</span>"
 	],
-	"component_base_url" : 'component_templates/',
-	"highlight_colour" : '#e89853'
+	"component_base_url" : "component_templates/",
+	"highlight_colour" : "#e89853"
 }

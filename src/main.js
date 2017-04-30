@@ -20,7 +20,7 @@ function handleError(e) {
 	console.log(e);
 }
 
-function loadPage(page_id, data_overrides) {
+function loadPage(page_id, input_data, data_overrides) {
 
     //TODO: sanity check
 
@@ -30,28 +30,32 @@ function loadPage(page_id, data_overrides) {
 		mainRactive.teardown();
 	}
 
-	data = PageModels.getPageData(page_id, data_overrides);
+	PageModels.preparePageData(page_id, input_data).then(
+		function(data){
+			data = $.extend(app_data, data, data_overrides);
+			console.log("New page data", data);
 
-	//console.log("Hello" , data);
-
-	if (app_data.login_state && app_data.session_key) {
-		Ractive.load(app_data.pages[page_id].template_file).then(function (RPage) {
-			mainRactive = new RPage({
-				el: app_data.target_element,
-				data: data
-			});
-			app_data.current_page = page_id;
-		});
-	} else {
-		Ractive.load(app_data.pages[app_data.login_page].template_file).then(function (RPage) {
-			mainRactive = new RPage({
-				el: app_data.target_element,
-				data: data
-			});
-			app_data.current_page = app_data.login_page;
-		});
-	}
-
+            if (app_data.login_state && app_data.session_key) {
+                Ractive.load(app_data.pages[page_id].template_file).then(function (RPage) {
+                    mainRactive = new RPage({
+                        el: app_data.target_element,
+                        data: data
+                    });
+                    app_data.current_page = page_id;
+                });
+            } else {
+                Ractive.load(app_data.pages[app_data.login_page].template_file).then(function (RPage) {
+                    mainRactive = new RPage({
+                        el: app_data.target_element,
+                        data: data
+                    });
+                    app_data.current_page = app_data.login_page;
+                });
+            }
+		}
+	).fail( function(error_text){
+        mainRactive.set('alerts', [{type: "warning", content: error_text, dismissible: true}]);
+	});
 }
 
 function serverLogin(user, pw) {

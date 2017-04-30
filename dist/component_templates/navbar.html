@@ -6,6 +6,12 @@
 			<a class="nav-link" href="#" on-click="selection">{{value}} {{# i === selected_index}}<span class="sr-only">(current)</span>{{/i}}</a>
 		</li>
 	{{/entries}}
+	</ul>
+    <ul class="nav navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="#" on-click="logout"> Logout </a>
+        </li>
+    </ul>
 </nav>
 
 
@@ -27,6 +33,20 @@
 				}
 
 				return false;
+			});
+
+			//logout
+			this.on( 'logout', function (event) {
+			    console.log( 'LogOut clicked', event);
+                var serverLogout = this.get('serverLogout');
+
+                if(typeof serverLogout !== 'undefined'){
+                    serverLogout();
+                }else{
+                    throw new SyntaxError("serverLogout is not defined!");
+                }
+
+                return false;
 			});
 		}
 	};
