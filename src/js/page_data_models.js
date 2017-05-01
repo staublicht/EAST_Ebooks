@@ -2,6 +2,11 @@ $ = require('jquery');
 EbookServer = require('./ebooks_server_api.js');
 app_data = require('./app_data.json');
 
+//default JSON filter
+var transformJSONFunc = function(key, value){
+    return value;
+}
+
 var lookupPageData = {
     //login page
     0 : function(deferred){
@@ -10,6 +15,7 @@ var lookupPageData = {
     //list page
     1 : function(deferred){
 
+        /*
         var transformJSONFunc = function(key, value){
             switch(key) {
                 case "title_original":
@@ -22,6 +28,7 @@ var lookupPageData = {
                     return value;
             }
         };
+        */
 
         EbookServer.getList(
             'ebooks',
@@ -42,6 +49,8 @@ var lookupPageData = {
     },
     //edit page
     2 : function(deferred, input_data) {
+
+        /*
         var transformJSONFunc = function(key, value){
             switch(key) {
                 case "title_original":
@@ -54,17 +63,18 @@ var lookupPageData = {
                     return value;
             }
         };
+        */
 
         EbookServer.getSingle(
             'ebooks',
             input_data,
-            [ 'id', 'author', 'title_original', 'language', 'status', 'date_release', 'downloads' ],
+            '*', //* for select all
             transformJSONFunc
         ).then(function (return_data) {
             console.log(return_data);
             deferred.resolve({
                 "login_state" : return_data['session'],
-                'edit_book' : return_data['data']
+                "edit_book" : return_data['data'][0] //get first entry
             });
         }).fail(function (e) {
             console.log("Page data preparation failed.", e);

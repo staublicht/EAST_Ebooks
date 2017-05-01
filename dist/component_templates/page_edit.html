@@ -44,7 +44,7 @@
 		<div class="row form-group">
 			<div class="col-md-4">
 				<label for="author-txt">Author (required) </label>
-				<input id="author-txt" class="form-control" type="text" required value="{{author}}" maxlength="30" />
+				<input id="author-txt" on-change="updateData: author" class="form-control" type="text" required value="{{author}}" maxlength="30" />
 			</div>
 			<div class="col-md-4">
 				<label for="title-txt">Title (required) </label>
@@ -52,7 +52,7 @@
 			</div>
 			<div class="col-md-4">
 				<label for="original-title-txt">Original Title </label>
-				<input id="original-title-txt" class="form-control" type="text" required value="{{original_title}}" maxlength="30" />
+				<input id="original-title-txt" class="form-control" type="text" required value="{{title_original}}" maxlength="30" />
 			</div>
 		</div>
 		<div class="row form-group">
@@ -70,7 +70,7 @@
 			</div>
 			<div class="col-md-4">
 				<label for="author-txt">ePub release date </label>
-				<input id="author-txt" class="form-control" type="text" disabled value="{{release_date}}" maxlength="30" />
+				<input id="author-txt" class="form-control" type="text" disabled value="{{date_release}}" maxlength="30" />
 			</div>
 		</div>
 		<div class="row form-group">
@@ -84,7 +84,7 @@
 			</div>
 			<div class="col-md-4">
 				<label for="author-txt">Last edited </label>
-				<input id="author-txt" class="form-control" type="text" disabled value="{{edit_date}}" maxlength="30" />
+				<input id="author-txt" class="form-control" type="text" disabled value="{{date_edit}}" maxlength="30" />
 			</div>
 		</div>
 		<h3>Content
@@ -138,6 +138,59 @@
 	component.exports = {
 		onrender: function () {
 			console.log( 'Edit Page loaded.');
+
+            this.on('updateData', function(event, field_name){
+                var table, id, value;
+
+                table = 'ebooks';
+                id = event.context["id"];
+                value = event.context[field_name];
+
+                console.log(
+                    'updateEvent',
+                    event,
+                    table,
+                    id,
+                    field_name
+                );
+
+                var updateDataSingle = this.get('updateDataSingle');
+
+                if(typeof updateDataSingle !== 'undefined'){
+                    updateDataSingle( 'ebooks', id, { field_name : value } );
+                }else{
+                    throw new SyntaxError("updateDataSingle is not defined!");
+                }
+
+                return false;
+            });
+
+
+            /*
+			this.on('change', function(changeObj){
+                console.log( 'Book data change:', changeObj);
+
+			    var id = this.get('edit_book.id');
+			    for(var key in changeObj) break;
+
+                var data = {};
+                data[key.substr(10) //cut off the 'edit_book' part
+                    ] = changeObj[key];
+
+                var updateDataSingle = this.get('updateDataSingle');
+
+                if(typeof updateDataSingle !== 'undefined'){
+                    //load edit page with right book id
+
+                    updateDataSingle( 'ebooks', id, data );
+                }else{
+                    throw new SyntaxError("updateDataSingle is not defined!");
+                }
+
+                return false;
+
+            });
+            */
 
 			//
 		},

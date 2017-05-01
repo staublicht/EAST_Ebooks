@@ -1,6 +1,6 @@
 {
 	"login_state" : false,
-	"session_key" : "false",
+	"session_key" : "true",
 	"target_element" : "#ractive_page",
 	"page_title" : "Ebooks Management",
 	"menu" : {

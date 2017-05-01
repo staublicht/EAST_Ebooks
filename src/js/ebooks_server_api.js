@@ -22,6 +22,7 @@ function makeRequest(data, JSON_reviver_transform) {
         try {
             return_data = JSON.parse(return_data, JSON_reviver_transform);
             return_data = $.isArray(return_data) ? return_data[0] : return_data; //hack needed in case data is wrapped in array
+            console.log("Server Reply JSON", return_data);
             deferred.resolve(return_data);
         } catch(e) {
             console.log("Couldn't read JSON data.", e);
@@ -36,6 +37,17 @@ function makeRequest(data, JSON_reviver_transform) {
 	return deferred.promise();
 }
 
+function updateSingle(table, id, send_data) {
+    var data = {};
+    data[table] = {
+        'put' : {
+            'id' : id,
+            'data' : send_data
+        }
+    };
+    return makeRequest(data);
+}
+
 function getList(table, limit, offset, return_fields, JSON_reviver_transform) {
     var data = {};
     data[table] = {
@@ -45,8 +57,6 @@ function getList(table, limit, offset, return_fields, JSON_reviver_transform) {
             'return_fields' : return_fields
         }
     };
-
-    console.log(data);
     return makeRequest(data, JSON_reviver_transform);
 }
 
@@ -59,8 +69,6 @@ function getSingle(table, id, return_fields, JSON_reviver_transform) {
             'return_fields' : return_fields
         }
     };
-
-    console.log("Request Data:", data);
     return makeRequest(data, JSON_reviver_transform);
 }
 
@@ -86,11 +94,12 @@ function login(user, pw){
 function logout(){
     return makeRequest({
         'session' : {
-            'logout' : 'true'
+            'logout' : true
         }
     });
 }
 
+exports.updateSingle = updateSingle;
 exports.getList = getList;
 exports.getSingle = getSingle;
 exports.getSession = getSession;
