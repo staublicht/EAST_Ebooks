@@ -84,7 +84,7 @@
 			</div>
 			<div class="col-md-4">
 				<label for="author-txt">Last edited </label>
-				<input id="author-txt" class="form-control" type="text" disabled value="{{date_edit}}" maxlength="30" />
+				<input id="author-txt" class="form-control" type="text" disabled value="{{date_edited}}" maxlength="30" />
 			</div>
 		</div>
 		<h3>Content
@@ -140,7 +140,7 @@
 			console.log( 'Edit Page loaded.');
 
             this.on('updateData', function(event, field_name){
-                var table, id, value;
+                var table, id, value, data;
 
                 table = 'ebooks';
                 id = event.context["id"];
@@ -154,10 +154,13 @@
                     field_name
                 );
 
+                data = {};
+                data[field_name] = value;
+
                 var updateDataSingle = this.get('updateDataSingle');
 
                 if(typeof updateDataSingle !== 'undefined'){
-                    updateDataSingle( 'ebooks', id, { field_name : value } );
+                    updateDataSingle( 'ebooks', id, data );
                 }else{
                     throw new SyntaxError("updateDataSingle is not defined!");
                 }
