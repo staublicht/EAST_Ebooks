@@ -13,15 +13,20 @@ $actions->session->logout = null;
 $actions->account->get->id = null;
 $actions->account->get->username = null;
 $actions->account->post->id = null;
-$actions->account->update->id = null;
+$actions->account->put->id = null;
 $actions->account->delete->id = null;
 
 /*
  * set ebooks actions
  */
+$actions->ebooks->get->id = null;
 $actions->ebooks->get->limit = null;
 $actions->ebooks->get->offset = null;
 $actions->ebooks->get->return_fields = null;
+$actions->ebooks->post->data = null;
+$actions->ebooks->put->id = null;
+$actions->ebooks->put->data = null;
+$actions->ebooks->delete->id = null;
 
 /*
  * register actions

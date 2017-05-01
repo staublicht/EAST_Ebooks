@@ -9,7 +9,7 @@ require('config/register.php');
  * validate JSON input
  */
 if( isset( $_POST ) )
-    $request = $api->sanitize( $_POST );
+    $request = $api->sanitize( $_POST['request'] );
 
 
 /*
@@ -24,6 +24,7 @@ if( isset( $request->session ) )
         $username = $request->session->login->username;
         $password = $request->session->login->password;
         $users = $mysql->select( 'users', '*', false, false, false );
+
         $mysql->login( $session->login( $users, $username, $password ) );
 
     }
@@ -42,20 +43,31 @@ if( isset( $request->session ) )
 if( isset( $request->ebooks ) )
 {
 
+    /**
+     * TODO: make validation function
+     * validate object ($request->ebooks->*)
+     * returning sanitized values above as data array/object members
+     */
+
     if( isset( $request->ebooks->get ) )
     {
 
+        $id = ( isset( $request->ebooks->get->id ) ) ? $request->ebooks->get->id : false;
         $limit = ( isset( $request->ebooks->get->limit ) ) ? $request->ebooks->get->limit : false;
         $offset = ( isset( $request->ebooks->get->offset ) ) ? $request->ebooks->get->offset : false;
         $return_fields = ( isset( $request->ebooks->get->return_fields ) ) ? $request->ebooks->get->return_fields : '*';
 
-        $return = [];
-        $ebooks = $mysql->select( 'ebooks', $return_fields, false, $limit, $offset );
+        $api->addOutput( array( 'data' => $mysql->select( 'ebooks', $return_fields, $id, $limit, $offset ) ) );
 
-        while( $ebook = $ebooks->fetch_array(MYSQLI_ASSOC) )
-            array_push($return, $ebook);
+    }
 
-        $api->addOutput( array( 'booklist' => $return ) );
+    if( isset( $request->ebooks->put ) )
+    {
+
+        $id = ( isset( $request->ebooks->put->id ) ) ? $request->ebooks->put->id : false;
+        $data = ( isset( $request->ebooks->put->data ) ) ? $request->ebooks->put->data : false;
+
+        $api->addOutput( array( 'data' => $mysql->update( 'ebooks', $id, $data ) ) );
 
     }
 

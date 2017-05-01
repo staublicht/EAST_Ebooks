@@ -28,9 +28,9 @@ class mysql
             die( 'DB Connection failed' );
 
         } else {
-            /*
-             * success
-             */
+
+            $this->connection->set_charset("utf8");
+
         }
 
     }
@@ -75,67 +75,158 @@ class mysql
 
     /**
      * @param $table
-     * @param $id
      * @param string $return_fields
-     * @return bool|mysqli_result
+     * @param bool $id
+     * @param int $limit
+     * @param int $offset
+     * @return array|bool
      */
-    public function select( $table, $return_fields = '*', $id = false, $limit = 10, $offset = 0, $sort = 'desc' )
+    public function select( $table, $return_fields = '*', $id = false, $limit = 10, $offset = 0 )
     {
 
-        if( $return_fields == '*' )
-            $selector_string = '*';
+        $table = $this->connection->real_escape_string( $table );
 
-        else if( is_array( $return_fields ) )
+        if( ( $return_fields == '*' ) || ( is_array( $return_fields ) ) )
         {
 
-            $selector_array = [];
+            if( is_array( $return_fields ) )
+            {
+
+                $selector_array = [];
+
+                $query = "SHOW COLUMNS FROM $table";
+
+                $result = $this->connection->query( $query );
+
+                while( $column = $result->fetch_object() )
+                    if( in_array($column->Field, $return_fields) )
+                        array_push( $selector_array, $column->Field );
+
+                $selector_string = implode( ', ', $selector_array );
+
+                if( $selector_string == '' )
+                    return false;
+
+            }
+            else
+            {
+                $selector_string = $return_fields;
+            }
+
+            if( is_int( $id ) || is_string( $id ) || ( $id === false ) )
+            {
+
+                $query = "SELECT $selector_string FROM $table";
+
+                if( !is_bool( $id ) )
+                {
+
+                    $id = $this->connection->real_escape_string( ( is_string( $id ) ) ? intval( $id ) : $id );
+                    $query .= " WHERE id = $id";
+                }
+
+                if( $limit !== -1 )
+                {
+
+                    if( is_int( $limit ) )
+                    {
+
+                        if( $limit >= 0 )
+                        {
+
+                            $limit = $this->connection->real_escape_string( $limit );
+                            $query .= " LIMIT $limit";
+
+                            if( is_int( $offset ) )
+                                if( $offset >= 0 )
+                                {
+                                    $offset = $this->connection->real_escape_string( $offset );
+                                    $query .= " OFFSET $offset";
+                                }
+
+                        }
+
+                    }
+
+                }
+
+                $result = $this->connection->query( $query );
+
+                $return = [];
+
+                while( $entry = $result->fetch_array(MYSQLI_ASSOC) )
+                    array_push($return, $entry);
+
+                return $return;
+
+            }
+
+            return false;
+
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param bool $table
+     * @param bool $id
+     * @param bool $data
+     * @return bool|mysqli_result
+     */
+    public function update( $table, $id = false, $data = false )
+    {
+
+        $table = $this->connection->real_escape_string( $table );
+
+        if( !$id || !$data )
+            return false;
+
+        if( is_array( $data ) )
+        {
+
+            $set = [];
 
             $query = "SHOW COLUMNS FROM $table";
 
-            $result = $this->connection->query( $this->connection->real_escape_string( $query ) );
+            $result = $this->connection->query( $query );
 
-            while( $data = $result->fetch_object() )
-                if( in_array($data->Field, $return_fields) )
-                    array_push( $selector_array, $data->Field );
+            while( $column = $result->fetch_object() )
+                if( array_key_exists($column->Field, $data) )
+                    $set[$column->Field] = $data[$column->Field];
 
-            $selector_string = implode( ', ', $selector_array );
+            if( empty( $set ) )
+                return false;
 
-            if( $selector_string == '' )
+        }
+
+        if( is_int( $id ) || is_string( $id ) )
+        {
+
+            $query = "UPDATE $table SET";
+
+            foreach( $set as $key => $value )
             {
-                $selector_string = 'null';
-                $limit = 0;
+
+                $key = $this->connection->real_escape_string( $key );
+                $value = $this->connection->real_escape_string( $value );
+                $query .= " $key = '$value',";
+
             }
 
-        }
+            $query = rtrim( $query,',' );
 
-        else
-        {
-            $selector_string = 'null';
-            $limit = 0;
-        }
+            $id = $this->connection->real_escape_string( ( is_string( $id ) ) ? intval( $id ) : $id );
+            $query .= " WHERE id = '$id'";
 
+            $result = $this->connection->query( $query );
 
-        $query = "SELECT $selector_string FROM $table";
-
-        if( is_int( $id ) )
-            $query .= " WHERE id = $id";
-
-        if( $limit !== -1 )
-        {
-
-            if( is_int( $limit ) )
-                if( $limit >= 0 )
-                    $query .= " LIMIT $limit";
-
-            if( is_int( $offset ) )
-                if( $offset >= 0 )
-                    $query .= " OFFSET $offset";
+            return $result;
 
         }
 
-        $result = $this->connection->query( $this->connection->real_escape_string( $query ) );
-
-        return $result;
+        return false;
 
     }
 
