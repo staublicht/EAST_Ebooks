@@ -16,17 +16,19 @@
 <r-navbar id={{menu.id}} entries={{menu.entries}} selected_index={{menu.selected_index}}>
 </r-navbar>
 
+{{#edit_book}}
 <div class="row">
 	<div class="col-md-9">
 		<h1 class="pt-2">Edit Book {{id}}
-		<small class="h6 align-middle">{{{status_tags[status]}}}</small>
-		<a href="#" class="btn btn-secondary btn-sm" role="button">Unpublish</a>
+			<small class="h6 align-middle">{{{status_tags[status]}}}</small>
+			<a href="#" class="btn btn-secondary btn-sm" role="button">Unpublish</a>
 		</h1>
 	</div>
 	<div class="col-md-3">
 		<a href="" class="btn btn-danger">Delete</a>
 	</div>
 </div>
+{{/edit_book}}
 
 {{#if alerts}}
 <r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
@@ -34,6 +36,7 @@
 <p class="text-muted">No warnings.</p>
 {{/if}}
 
+{{#edit_book}}
 <form>
 <div class="row">
 	<div class="col-lg-8">
@@ -127,6 +130,7 @@
 	</div>
 </div>
 </form>
+{{/edit_book}}
 
 <r-footer></r-footer>
 
@@ -140,13 +144,16 @@
 		data: function() {
 			return {
 				// Testdata
-				'id' : 0 ,
-				 'author' : 'Missing author',
-				 'original_title' : 'Missing title',
-				 'language' : 'missing language',
-				 'status' : 0,
-				 'release_date' : '-',
-				 'downloads' : '-'
+                'edit_book' : {
+                    'id' : 0 ,
+                    'author' : 'Missing author',
+					'title' : 'Missing title',
+                    'original_title' : 'Missing title',
+                    'language' : 'missing language',
+                    'status' : 0,
+                    'release_date' : '-',
+                    'downloads' : '-'
+				}
 			};
 		}
 	};

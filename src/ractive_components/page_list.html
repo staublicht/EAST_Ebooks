@@ -42,7 +42,8 @@
 				var loadPage = this.get('loadPage');
 
 				if(typeof loadPage !== 'undefined'){
-					loadPage( this.get('edit_page') , this.get('table_entries.' + 2) );
+				    //load edit page with right book id
+					loadPage( this.get('edit_page') , event.id );
 				}else{
 					throw new SyntaxError("loadPage is not defined!");
 				}
@@ -56,7 +57,7 @@
 
 		},
 		data: function() {
-			return {
+		    return {
 				"selectedLang" : -1,
 				"selectedCat" : -1,
 				"selectedStatus" : -1,
@@ -94,8 +95,9 @@
 					 'release_date' : '-',
 					 'downloads' : '-'
 					}
+
 				]
-			};
+			}
 		}
 	};
 </script>
