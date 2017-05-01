@@ -44,7 +44,34 @@ class session
     public function login( $users, $username, $password )
     {
 
-        while( $user = $users->fetch_object() )
+        foreach( $users as $user )
+        {
+
+            if( strtolower ( $user['username'] ) == strtolower ( $username ) )
+            {
+
+                if( password_verify( $password, $user['password'] ) ) {
+
+                    foreach( $user as $key=>$value )
+                    {
+                        $_SESSION['user'][$key] = $value;
+                    }
+
+                    $_SESSION['user']['session_id'] = session_id();
+
+                    $this->status = true;
+
+                    return $user->id;
+
+                }
+
+            }
+
+        }
+
+        return false;
+
+        /*while( $user = $users->fetch_object() )
         {
 
             if( strtolower ( $user->username ) == strtolower ( $username ) )
@@ -70,6 +97,7 @@ class session
         }
 
         return false;
+        */
 
     }
 

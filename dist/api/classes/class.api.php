@@ -64,7 +64,14 @@ class api
                     {
 
                         if( is_object( $inputValue ) )
-                            $result->$inputKey = whitelist( $inputValue, $structureValue );
+                        {
+
+                            if( $inputKey == 'data' ) // keep input 'data' object alive
+                                $result->$inputKey = (array) $inputValue;
+                            else
+                                $result->$inputKey = whitelist( $inputValue, $structureValue );
+
+                        }
 
                         else if( is_string( $inputValue ) || is_int( $inputValue ) || is_bool( $inputValue ) || is_array( $inputValue ) )
                             $result->$inputKey = $inputValue;
@@ -81,7 +88,7 @@ class api
         }
 
         $result = whitelist( json_decode( $input ), $this->actions );
-            
+
         return $result;
 
     }
