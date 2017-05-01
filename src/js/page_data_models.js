@@ -31,6 +31,7 @@ var lookupPageData = {
             transformJSONFunc
         ).then(function (return_data) {
             deferred.resolve({
+                "login_state" : return_data['session'],
                 'table_entries' : return_data['data']
             });
 
@@ -62,6 +63,7 @@ var lookupPageData = {
         ).then(function (return_data) {
             console.log(return_data);
             deferred.resolve({
+                "login_state" : return_data['session'],
                 'edit_book' : return_data['data']
             });
         }).fail(function (e) {

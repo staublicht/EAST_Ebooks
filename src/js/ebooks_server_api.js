@@ -17,10 +17,17 @@ function makeRequest(data, JSON_reviver_transform) {
 	$.post(server_url + '?v=' + Math.floor(Math.random() * 500),
 		data
 		).done(function (return_data) {
-		console.log("Server Request successful.", return_data);
-        return_data = JSON.parse(return_data, JSON_reviver_transform);
-        return_data = $.isArray(return_data) ? return_data[0] : return_data; //hack needed in case data is wrapped in array
-		deferred.resolve(return_data);
+		console.log("Server Reply received.");
+
+        try {
+            return_data = JSON.parse(return_data, JSON_reviver_transform);
+            return_data = $.isArray(return_data) ? return_data[0] : return_data; //hack needed in case data is wrapped in array
+            deferred.resolve(return_data);
+        } catch(e) {
+            console.log("Couldn't read JSON data.", e);
+            deferred.reject(e);
+        }
+
 	}).fail(function (e) {
 		console.log("Server Request failed.", e);
 		deferred.reject(e);

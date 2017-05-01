@@ -66,6 +66,7 @@ function serverLogin(user, pw) {
 			//app_data.session_key = return_data.session_key;
 			loadPage(app_data.index_page);
 		} else {
+            console.log("Login failed, session state:", return_data.session);
             if (app_data.current_page !== app_data.login_page) {
                 loadPage(app_data.login_page);
             } else {
@@ -73,6 +74,13 @@ function serverLogin(user, pw) {
                 //TODO: handle Server not reachable? Should we have some possibility to work offline in future?
             }
 		}
+	}).fail(function (e) {
+        console.log("Login failed. Could not get data from server:", e);
+        if (app_data.current_page !== app_data.login_page) {
+            loadPage(app_data.login_page);
+        }
+
+        mainRactive.set('alerts', [{type: "warning", content: "Login failed. Could not get data from server.", dismissible: false}]);
 	});
 }
 
