@@ -48,17 +48,17 @@
 			</div>
 			<div class="col-md-4">
 				<label for="title-txt">Title (required) </label>
-				<input id="title-txt" class="form-control" type="text" required value="{{title}}" maxlength="30" />
+				<input id="title-txt" on-change="updateData: title" class="form-control" type="text" required value="{{title}}" maxlength="30" />
 			</div>
 			<div class="col-md-4">
 				<label for="original-title-txt">Original Title </label>
-				<input id="original-title-txt" class="form-control" type="text" required value="{{title_original}}" maxlength="30" />
+				<input id="original-title-txt" on-change="updateData: title_original" class="form-control" type="text" required value="{{title_original}}" maxlength="30" />
 			</div>
 		</div>
 		<div class="row form-group">
 			<div class="col-md-4">
 				<label for="lang-select">Language (required) </label>
-				<select id="lang-select" class="custom-select">
+				<select id="lang-select" class="custom-select" value="{{language}}">
 					{{#languages : i}}
 					<option value="{{i}}" {{# . === language}}selected{{/i}}>{{.}}</option>
 					{{/languages}}
@@ -105,24 +105,14 @@
 		</div>
 		<h3>Security Level</h3>
 		<fieldset class="form-group">
+            {{#security_levels : i}}
 			<div class="form-check">
 				<label class="form-check-label">
-					<input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-					Option one is this and that&mdash;be sure to include why it's great
+					<input type="radio" class="form-check-input" name="{{security_level}}" id="optionsRadios1" value="{{security_levels}}" checked>
+                    {{security_levels[i]}}
 				</label>
 			</div>
-			<div class="form-check">
-			<label class="form-check-label">
-					<input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="option2">
-					Option two can be something else and selecting it will deselect option one
-				</label>
-			</div>
-			<div class="form-check disabled">
-			<label class="form-check-label">
-					<input type="radio" class="form-check-input" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
-					Option three is disabled
-				</label>
-			</div>
+            {{/security_levels}}
 		</fieldset>
 	</div>
 	<div class="col-lg-4">
