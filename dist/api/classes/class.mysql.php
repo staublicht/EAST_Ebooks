@@ -193,36 +193,46 @@ class mysql
             $result = $this->connection->query( $query );
 
             while( $column = $result->fetch_object() )
+            {
+
                 if( array_key_exists($column->Field, $data) )
                     $set[$column->Field] = $data[$column->Field];
+
+                if( $column->Field == 'users_id_edited' )
+                    $set[$column->Field] = intval( $_SESSION['user']['id'] );
+
+                if( $column->Field == 'date_edited' )
+                    $set[$column->Field] = date("Y-m-d H:i:s");
+
+            }
 
             if( empty( $set ) )
                 return false;
 
-        }
-
-        if( is_int( $id ) || is_string( $id ) )
-        {
-
-            $query = "UPDATE $table SET";
-
-            foreach( $set as $key => $value )
+            if( is_int( $id ) || is_string( $id ) )
             {
 
-                $key = $this->connection->real_escape_string( $key );
-                $value = $this->connection->real_escape_string( $value );
-                $query .= " $key = '$value',";
+                $query = "UPDATE $table SET";
+
+                foreach( $set as $key => $value )
+                {
+
+                    $key = $this->connection->real_escape_string( $key );
+                    $value = $this->connection->real_escape_string( $value );
+                    $query .= " $key = '$value',";
+
+                }
+
+                $query = rtrim( $query,',' );
+
+                $id = $this->connection->real_escape_string( ( is_string( $id ) ) ? intval( $id ) : $id );
+                $query .= " WHERE id = '$id'";
+
+                $result = $this->connection->query( $query );
+
+                return $result;
 
             }
-
-            $query = rtrim( $query,',' );
-
-            $id = $this->connection->real_escape_string( ( is_string( $id ) ) ? intval( $id ) : $id );
-            $query .= " WHERE id = '$id'";
-
-            $result = $this->connection->query( $query );
-
-            return $result;
 
         }
 
