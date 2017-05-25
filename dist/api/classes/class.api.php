@@ -9,12 +9,28 @@ class api
     /*
      * expectable JSON objects
      */
-    public $actions = NULL;
+    public $actions = null;
 
     /*
      * array collection for JSON output on destruct
      */
     private $output = array();
+
+    /*
+     * mysql object
+     */
+    private $mysql = null;
+
+    /**
+     * api constructor.
+     * @param $mysql
+     */
+    function __construct( $mysql )
+    {
+
+        $this->mysql = $mysql;
+
+    }
 
     function __destruct()
     {

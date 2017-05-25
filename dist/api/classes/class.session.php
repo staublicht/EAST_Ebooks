@@ -11,11 +11,19 @@ class session
      */
     public $status;
 
+    /*
+     * mysql object
+     */
+    private $mysql;
+
     /**
      * session constructor.
+     * @param $mysql
      */
-    function __construct()
+    function __construct( $mysql )
     {
+
+        $this->mysql = $mysql;
 
         if( session_status() == PHP_SESSION_NONE )
         {

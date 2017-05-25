@@ -5,8 +5,12 @@ require('init.php');
 require('config/register.php');
 
 
-if( !empty( $_FILES ) )
-    $api->addOutput( array( 'upload' => $files->upload() ) );
+/*
+ * secure file download
+ */
+if( isset( $_SERVER['REDIRECT_URL'] ) )
+    if( stripos( trim( $_SERVER['REDIRECT_URL'], '/'), 'download') === 0)
+        $files->download( $_SERVER['REDIRECT_URL'] );
 
 
 /*
@@ -14,6 +18,13 @@ if( !empty( $_FILES ) )
  */
 if( isset( $_POST ) )
     $request = $api->sanitize( $_POST['request'] );
+
+
+/*
+ * save uploaded files
+ */
+if( !empty( $_FILES ) )
+    $api->addOutput( array( 'upload' => $files->upload() ) );
 
 
 /*
