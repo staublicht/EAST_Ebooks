@@ -32,3 +32,10 @@ $mysql = new mysql;
  */
 require_once('classes/class.session.php');
 $session = new session;
+
+
+/*
+ * load and initialize files class
+ */
+require_once('classes/class.files.php');
+$files = new files( $mysql );

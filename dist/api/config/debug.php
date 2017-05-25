@@ -1,6 +1,6 @@
 <?php if( !defined( 'master' ) ) die( header( 'HTTP/1.0 404 Not Found' ) );
 
-error_reporting( E_ERROR );
+error_reporting( E_ALL );
 
 mysqli_report( MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT );
 

@@ -5,6 +5,10 @@ require('init.php');
 require('config/register.php');
 
 
+if( !empty( $_FILES ) )
+    $api->addOutput( array( 'upload' => $files->upload() ) );
+
+
 /*
  * validate JSON input
  */
@@ -16,8 +20,14 @@ if( isset( $_POST ) )
  * handle ebook data tasks
  */
 
+if( $input = $api->input( $request, $request->ebooks->delete ) )
+    $api->addOutput( array( 'data' => $mysql->delete('ebooks', $input['id'] ) ) );
+
 if( $input = $api->input( $request, $request->ebooks->get ) )
-    $api->addOutput(array( 'data' => $mysql->select('ebooks', $input['return_fields'], $input['id'], $input['limit'], $input['offset'] ) ) );
+    $api->addOutput( array( 'data' => $mysql->select('ebooks', $input['return_fields'], $input['id'], $input['limit'], $input['offset'] ) ) );
+
+if( $input = $api->input( $request, $request->ebooks->post ) )
+    $api->addOutput( array( 'data' => $mysql->insert('ebooks', $input['data'] ) ) );
 
 if( $input = $api->input( $request, $request->ebooks->put ) )
     $api->addOutput( array( 'data' => $mysql->update('ebooks', $input['id'], $input['data'] ) ) );

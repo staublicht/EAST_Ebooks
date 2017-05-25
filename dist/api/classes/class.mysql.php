@@ -75,6 +75,125 @@ class mysql
 
     /**
      * @param $table
+     * @param bool $id
+     * @return bool|int
+     */
+    public function delete( $table, $id = false )
+    {
+
+        $table = $this->connection->real_escape_string( $table );
+
+        if( $id )
+        {
+
+            $id = $this->connection->real_escape_string( ( is_string( $id ) ) ? intval( $id ) : $id );
+
+            $query = "DELETE FROM $table WHERE id = $id";
+
+            $result = $this->connection->query( $query );
+
+            $return = $this->connection->affected_rows;
+
+            /**
+             * remove associated data
+             */
+            switch( $table )
+            {
+
+                case 'ebooks':
+                    $query = "DELETE FROM ebooks_categories_assignment WHERE ebooks_id = $id";
+                    $result = $this->connection->query( $query );
+                    break;
+
+            }
+
+            return $return;
+
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param bool $table
+     * @param bool $data
+     * @return bool|mysqli_result
+     */
+    public function insert( $table, $data = false )
+    {
+
+        $table = $this->connection->real_escape_string( $table );
+
+        if( !$data )
+            return false;
+
+        if( is_array( $data ) )
+        {
+
+            $set = [];
+
+            $query = "SHOW COLUMNS FROM $table";
+
+            $result = $this->connection->query( $query );
+
+            while( $column = $result->fetch_object() )
+            {
+
+                if( array_key_exists($column->Field, $data) )
+                    $set[$column->Field] = $data[$column->Field];
+
+                if( $table == 'ebooks' )
+                {
+
+                    if( $column->Field == 'users_id_edited' )
+                        $set[$column->Field] = intval( $_SESSION['user']['id'] );
+
+                    if( $column->Field == 'date_edited' )
+                        $set[$column->Field] = date("Y-m-d H:i:s");
+
+                }
+
+            }
+
+            if( empty( $set ) )
+                return false;
+
+            $query = "INSERT INTO $table (";
+
+            foreach( $set as $key => $value )
+            {
+
+                $key = $this->connection->real_escape_string( $key );
+                $query .= " $key,";
+
+            }
+
+            $query = rtrim( $query,',' ) . ') VALUES (';
+
+            foreach( $set as $key => $value )
+            {
+
+                $value = $this->connection->real_escape_string( $value );
+                $query .= " '$value',";
+
+            }
+
+            $query = rtrim( $query,',' ) . ')';
+
+            $result = $this->connection->query( $query );
+
+            if( $result )
+                return $this->connection->insert_id;
+
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param $table
      * @param string $return_fields
      * @param bool $id
      * @param int $limit

@@ -6,3 +6,5 @@ define( 'mysqli_passwd',   '' );
 define( 'mysqli_dbname',   '' );
 define( 'mysqli_port',     false );
 define( 'mysqli_socket',   false );
+
+define( 'files_directory', '../files' );
