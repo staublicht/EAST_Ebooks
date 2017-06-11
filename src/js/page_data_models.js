@@ -2,18 +2,17 @@ $ = require('jquery');
 EbookServer = require('./ebooks_server_api.js');
 app_data = require('./app_data.json');
 
-//default JSON filter
-var transformJSONFunc = function(key, value){
-    return value;
-}
+var eBooks = new EbookServer.DataTableProvider(
+    "ebooks", 0, 50, 1000*60
+);
+console.log("eBooks Data Provider:", eBooks);
 
 var lookupPageData = {
     //login page
-    0 : function(deferred){
-        deferred.resolve({});
+    0 : function(){
     },
     //list page
-    1 : function(deferred){
+    1 : function(){
 
         /*
         var transformJSONFunc = function(key, value){
@@ -30,6 +29,11 @@ var lookupPageData = {
         };
         */
 
+        return {
+            "table_entries" : eBooks
+        };
+
+        /*
         EbookServer.getList(
             'ebooks',
             100, //limit
@@ -46,9 +50,11 @@ var lookupPageData = {
             console.log("Page data preparation failed.", e);
             deferred.reject("Book data could not be loaded!");
         });
+        */
     },
     //edit page
-    2 : function(deferred, input_data) {
+    2 : function(book_id) {
+        //input data is book id
 
         /*
         var transformJSONFunc = function(key, value){
@@ -65,6 +71,12 @@ var lookupPageData = {
         };
         */
 
+        return {
+            "edit_book" : eBooks.getEntry(book_id)
+        };
+
+
+        /*
         EbookServer.getSingle(
             'ebooks',
             input_data,
@@ -80,14 +92,11 @@ var lookupPageData = {
             console.log("Page data preparation failed.", e);
             deferred.reject("Book data could not be loaded!");
         });
+        */
     }
 };
 
-exports.preparePageData = function(page_id, input_data){
-    var deferred = $.Deferred();
-
+exports.getModel = function(page_id, input_data){
     console.log("getting page data for id:", page_id);
-    lookupPageData[page_id](deferred, input_data);
-
-    return deferred.promise();
+    return lookupPageData[page_id](input_data);
 };

@@ -5,52 +5,44 @@
 */
 
 //Definitions
-var jQuery, $, Ractive, EbookServer, bootstrap, app_data, mainRactive, PageModels;
+var jQuery, $, Ractive, EbookServer, bootstrap, app_data, mainRactive, PageDataModels;
 window.jQuery = $ = require('jquery');
 Ractive = require('ractive');
 Ractive.load = require('ractive-load');
 EbookServer = require('./js/ebooks_server_api.js');
+Ractive.adaptors.EbooksServerAdaptor = EbookServer.RactiveAdaptor;
 app_data = require('./js/app_data.json');
-PageModels = require('./js/page_data_models.js');
+PageDataModels = require('./js/page_data_models.js');
 mainRactive = new Ractive();
 
 "use strict";
 
 function loadPage(page_id, input_data, data_overrides) {
 
-    //TODO: sanity check
+	//check if logged in
+	var page = app_data.login_state ? page_id : app_data.login_page;
+	var pageDataModel = PageDataModels.getModel(page_id, input_data);
+	var data = app_data.login_state ? $.extend( app_data, pageDataModel, data_overrides) : {}; //full data or none if login
 
-	PageModels.preparePageData(page_id, input_data).then(
-		function(data){
-
-			//check if logged in
-            var page = app_data.login_state ? page_id : app_data.login_page;
-            data = app_data.login_state ? $.extend( app_data, data, data_overrides) : {}; //full data or none if login
-
-            Ractive.load(app_data.pages[page].template_file).then(function (RPage) {
-                if (typeof mainRactive.teardown !== "undefined") {
-                    mainRactive.teardown();
-                }
-
-                mainRactive = new RPage({
-                    el: app_data.target_element,
-                    data: data,
-                    lazy: true
-                });
-
-                app_data.current_page = page;
-
-                history.pushState({"page" : page_id}, app_data.pages[page_id].title, "");
-
-                if(page === app_data.login_page){
-                    mainRactive.set('alerts', [{type: "warning", content: "You are logged out.", dismissible: true}]);
-                }
-            }).fail(function(e){
-              console.log(e);
-            });
+	Ractive.load(app_data.pages[page].template_file).then(function (RPage) {
+		if (typeof mainRactive.teardown !== "undefined") {
+			mainRactive.teardown();
 		}
-	).fail( function(error_text){
-        mainRactive.set('alerts', [{type: "warning", content: error_text, dismissible: true}]);
+
+		mainRactive = new RPage({
+			el: app_data.target_element,
+			data: data,
+			lazy: true,
+            adapt: [ 'EbooksServerAdaptor' ]
+            //modifyArrays : true,
+		});
+
+		app_data.current_page = page;
+
+		history.pushState({"page" : page_id}, app_data.pages[page_id].title, "");
+
+	}).catch(function(e){
+	  console.log(e);
 	});
 }
 
