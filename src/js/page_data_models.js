@@ -3,9 +3,8 @@ EbookServer = require('./ebooks_server_api.js');
 app_data = require('./app_data.json');
 
 var eBooks = new EbookServer.DataTableProvider(
-    "ebooks", 0, 50, 1000*60
+    "ebooks", 120, 50, 1000*30
 );
-console.log("eBooks Data Provider:", eBooks);
 
 var lookupPageData = {
     //login page
@@ -30,7 +29,7 @@ var lookupPageData = {
         */
 
         return {
-            "table_entries" : eBooks
+            "data_table" : eBooks
         };
 
         /*

@@ -101,8 +101,7 @@ function addSingle(table, send_data) {
         'post',
         {
             'data' : send_data
-        },
-        JSON_reviver_transform
+        }
     );
     return request.makeRequest();
 }
@@ -188,10 +187,9 @@ function DataTableProvider (table_name, offset, request_limit, updateInterval, j
         this.transformJSONFunc = json_transform_func;
     }
 
-    this.request_limit = 100;
-    if (!(request_limit === undef || request_limit === null)) { //check if not undefined or null
-        this.request_limit = request_limit;
-    }
+    this.request_limit = request_limit ? request_limit : 100;
+
+    console.log("offset:",offset," request_limit:", request_limit);
 
     this.autoRetrieve();
 }
@@ -200,6 +198,7 @@ function DataTableProvider (table_name, offset, request_limit, updateInterval, j
 DataTableProvider.prototype = {
     constructor: DataTableProvider,
     retrieveData: function(offset, limit) {
+        console.log("offset:",offset,"limit:", limit);
         var _this = this;
         this.offset = offset ? offset : this.offset;
         this.request_limit = limit ? limit : this.request_limit;
@@ -224,9 +223,6 @@ DataTableProvider.prototype = {
             }
         ).fail(function (e) {
             console.log("Server Request 'get' failed.", e);
-            if(deferred) {
-                deferred.reject("Getting database record failed!");
-            }
         });
     },
     getEntry: function(id){
@@ -270,15 +266,17 @@ DataTableProvider.prototype = {
     addEntry: function(data){
         _this = this;
         //TODO validate!
-        addSingle(this.table_name,data).then(
+        addSingle(_this.table_name,data).then(
             function (return_data) {
                 _this.retrieveData(); //reload table with extra data object
             }
         ).fail(function (e) {
             console.log("Server Request 'post' failed.", e);
+            /*
             if(deferred) {
                 deferred.reject("Server Request 'put' failed.");
             }
+            */
         });
     },
     deleteEntry: function(id){
@@ -304,7 +302,7 @@ DataTableProvider.prototype = {
             )
         }
 
-        this.retrieveData(this.offset,this.limit);
+        this.retrieveData();
     },
     startInterval: function(time){
         this.stopInterval();
@@ -379,8 +377,10 @@ DataObject.prototype = {
 };
 
 const RactiveAdaptor = {
-    filter: function (object, keypath, ractive) {
+    filter: function (object) {
         // return `true` if a particular object is of the type we want to adapt.
+        //console.log("Adaptor filter called", object, "is Dataobject:", object instanceof DataObject, "isDataTable:", object instanceof DataTableProvider);
+
         return object instanceof DataObject || object instanceof DataTableProvider;
     },
     wrap: function (ractive, dataproviderobj, keypath, prefix) {
@@ -392,15 +392,17 @@ const RactiveAdaptor = {
     }
 };
 
+
 function DataObjectWrapper ( ractive, dataproviderobj, keypath, prefixer ) {
     this.object = dataproviderobj;
 
     dataproviderobj.updateLock = false;
 
     dataproviderobj.onUpdate = function(){
-        this.object.updateLock = true;
+        _this = this;
+        _this.updateLock = true;
         ractive.set(keypath,prefixer(_this.data)).then(function(){
-            this.object.updateLock = false;
+            _this.updateLock = false;
         }).catch(function(e){
             console.log("Ractive.set on Data Object failed. Object locked.", e);
         });
@@ -442,16 +444,20 @@ DataObjectWrapper.prototype = {
 function DataTableWrapper ( ractive, dataproviderobj, keypath, prefixer ) {
     this.object = dataproviderobj;
 
-    this.object.updateLock = false;
+    dataproviderobj.updateLock = false;
 
-    this.object.onUpdate = function(){
-        this.object.updateLock = true;
-        ractive.set(keypath,this.object.dataObjects).then(function(){
-            this.object.updateLock = false;
+    dataproviderobj.onUpdate = function(){
+        _this = this;
+        _this.updateLock = true;
+        console.log("Table onUpdate", _this.dataObjects);
+        ractive.set(keypath,_this).then(function(){
+            _this.updateLock = false;
         }).catch(function(e){
             console.log("Ractive.set on Data Table failed", e);
         });
     };
+
+    console.log("DataTable Adaptor created: ",dataproviderobj.table_name);
 }
 
 DataTableWrapper.prototype = {
@@ -461,8 +467,8 @@ DataTableWrapper.prototype = {
     get: function(){
         return this.object.dataObjects;
     }
-    //no set, set only directly on the entry objects
-    /* To be implemented later if/when INSERT of several entries is supported by server
+    //no set, set only directly on the entry objects, to be implemented later if/when INSERT of several entries is supported by server
+    /*
     reset: function(values){
         // don't allow setting itself with a new object of its own type, or not a collection of objects
         if(values instanceof DataTableProvider || Object.prototype.toString.call( models ) !== '[object Array]'){
@@ -474,7 +480,6 @@ DataTableWrapper.prototype = {
     }
     */
 };
-
 
 exports.login = login;
 exports.logout = logout;

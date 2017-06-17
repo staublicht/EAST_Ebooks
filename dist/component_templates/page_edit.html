@@ -25,7 +25,12 @@
 		</h1>
 	</div>
 	<div class="col-md-3">
-		<a href="" class="btn btn-danger">Delete</a>
+		<form class="form-inline mb-1">
+			<div class="form-group mt-1 mr-1">
+				<a href="#" class="btn btn-danger" on-click="deleteClick">Delete</a>
+			</div>
+		</form>
+
 	</div>
 </div>
 {{/edit_book}}
@@ -88,10 +93,12 @@
 			</div>
 		</div>
 		<h3>Content
-			&nbsp;<a href="#" class="btn btn-secondary btn-sm">Upload File</a>
 			&nbsp;<a href="#" class="btn btn-secondary btn-sm">Add Amazon</a>
 			&nbsp;<a href="#" class="btn btn-secondary btn-sm">Add Yumpu</a>
 		</h3>
+		<div class="formgroup">
+			<input type="file" id="fileinput" multiple="multiple" />
+		</div>
 
 		<h3>Additional Information
 		</h3>
@@ -128,6 +135,19 @@
 	component.exports = {
 		onrender: function () {
 			console.log( 'Edit Page loaded.');
+
+            this.on('deleteClick', function(event){
+                var book = this.get('edit_book', {virtual : true});
+                bookTableDP = book.dataProvider;
+                console.log(book,bookTableDP);
+                if('deleteEntry' in bookTableDP){
+                    //load edit page with right book id
+                    bookTableDP.deleteEntry(book.id);
+                }else{
+                    throw new SyntaxError("deleteEntry is not defined!");
+                }
+                return false;
+            });
 
 			/*
             this.on('updateData', function(event, field_name){

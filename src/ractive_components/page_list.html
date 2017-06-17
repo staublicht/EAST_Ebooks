@@ -11,19 +11,30 @@
 <r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
 {{/alerts}}
 
-<r-filters
-	languages={{languages}}
-	categories={{categories}}
-	status_tags={{status_tags}}
-	selectedLang={{selectedLang}}
-	selectedCat={{selectedCat}}
-	selectedStatus={{selectedStatus}}
-></r-filters>
+<div class="row">
+	<div class="col-md-10">
+		<r-filters
+				languages={{languages}}
+				categories={{categories}}
+				status_tags={{status_tags}}
+				selectedLang={{selectedLang}}
+				selectedCat={{selectedCat}}
+				selectedStatus={{selectedStatus}}
+		></r-filters>
+	</div>
+	<div class="col-md-2">
+		<form class="form-inline mb-1">
+			<div class="form-group mt-1 mr-1">
+				<a href="#" class="btn btn-primary" on-click="newClicked">Add Book</a>
+			</div>
+		</form>
+	</div>
+</div>
 
 <r-pagination></r-pagination>
 
 <r-table
-	status_tags={{status_tags}} columns={{table_columns}} entries={{table_entries}}
+	status_tags={{status_tags}} columns={{table_columns}} entries={{data_table}}
 ></r-table>
 
 <r-pagination></r-pagination>
@@ -36,10 +47,23 @@
 		onrender: function () {
 			console.log( 'List Page loaded.');
 
+			//create new book entry
+            this.on( 'newClicked', function (event) {
+                var dp = this.get('data_table', {virtual : true});
+                console.log(dp);
+                if('addEntry' in dp){
+                    //load edit page with right book id
+                    dp.addEntry( {"author" : "Test", "title_original" : "Test"} );
+                }else{
+                    throw new SyntaxError("addEntry is not defined!");
+                }
+                return false;
+			});
+
 			//select entry to edit
 			this.on( 'r-table.selectEntry', function (event) {
 				console.log( 'selectEntry', event );
-				var loadPage = this.get('loadPage');
+				var loadPage = this.get('loadPage', {virtual : true});
 
 				if(typeof loadPage !== 'undefined'){
 				    //load edit page with right book id
@@ -56,31 +80,32 @@
 			//function calls to request list entries from server
 
 		},
-		data: function() {
-		    return {
-				"selectedLang" : -1,
-				"selectedCat" : -1,
-				"selectedStatus" : -1,
-				"table_columns" : {
-					'id' : "Id",
-					'author' : "Author",
-					 'title_original' : "Original Title",
-					 'language' : "Language",
-					 'status' : "Status",
-					 'date_release' : "Release Date",
-					 'downloads' : "Downloads"
-				},
-				'table_entries' : [
-					{ 'id' : 0 ,
-					 'author' : '-',
-					 'original_title' : 'missing data',
-					 'language' : '-',
-					 'status' : 0,
-					 'release_date' : '-',
-					 'downloads' : '-'
-					}
-				]
-			}
-		}
+        data: function() {
+            return {
+                "selectedLang" : -1,
+                "selectedCat" : -1,
+                "selectedStatus" : -1,
+                "table_columns" : {
+                    'id' : "Id",
+                    'author' : "Author",
+                    'title_original' : "Original Title",
+                    'language' : "Language",
+                    'status' : "Status",
+                    'date_release' : "Release Date",
+                    'downloads' : "Downloads"
+                },
+                'data_table' : [
+                    { 'id' : 1 ,
+                        'author' : '-',
+                        'original_title' : 'missing data',
+                        'language' : '-',
+                        'status' : 0,
+                        'release_date' : '-',
+                        'downloads' : '-'
+                    }
+                ]
+            }
+        }
+
 	};
 </script>

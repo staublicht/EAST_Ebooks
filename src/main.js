@@ -96,7 +96,6 @@ function init() {
 	helpers.serverLogin = serverLogin;
 	helpers.loadPage = loadPage;
 	helpers.serverLogout = serverLogout;
-	helpers.updateDataSingle = EbookServer.updateSingle;
 
     serverLogin();
 
