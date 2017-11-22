@@ -1,28 +1,4 @@
 # -------------------------
-# Exclude all files with passwords, user related data, or are system files
-# -------------------------
-
-# ignore api config files with sensitive data
-dist/api/config/config.php
-dist/api/config/input.php
-
-# ignore all files starting with . or ~, like .htaccess
-.*
-~*
-
-#ignore node modules folder
-node_modules
-
-#ignore temp build files
-build/*
-
-# track this file .gitignore (i.e. do NOT ignore it)
-!.gitignore
-# ignore log files
-*.log
-
-
-# -------------------------
 # Whitelisted Files: track these files, if they exist
 # -------------------------
 
@@ -31,6 +7,19 @@ build/*
 !CHANGELOG.md
 !.htaccess
 
+# -------------------------
+# Exclude all files with passwords or user related data or system files
+# -------------------------
+
+# ignore api config files with sensitive data
+dist/api/config/config.php
+dist/api/config/input.php
+
+.*
+~*
+*.log
+build/*
+package-lock.json
 
 # -------------------------
 # Exclude directories
@@ -38,3 +27,4 @@ build/*
 
 dev/
 dist/
+node_modules/
