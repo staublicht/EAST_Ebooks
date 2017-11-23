@@ -60,12 +60,12 @@ class api
     public function input( $request = false, $data = false )
     {
 
-        if( !$request || !$data || !is_object($data) )
+        if( !$request || !$data )
             return false;
 
         $return = $this->input_get_default( $request, $this->methods, $data );
 
-        foreach( $data as $key => $value )
+        foreach( (array) $data as $key => $value )
             $return[$key] = $value;
 
         return $return;
@@ -90,8 +90,8 @@ class api
                 if( $structureKey == $requestKey)
                 {
 
-                    if( $requestValue == $object )
-                        foreach( $structureValue as $key => $value )
+                    if( $requestValue === $object )
+                        foreach( (array) $structureValue as $key => $value )
                             $return[$key] = false;
 
                     if( is_object( $requestValue ) )
@@ -173,20 +173,27 @@ class api
                 if( $inputKey == $structureKey )
                 {
 
-                    $result = new stdClass();
-
                     if( is_object( $inputValue ) )
                     {
 
                         if( $inputKey == 'data' ) // keep input 'data' object alive
+                        {
+                            if(!is_object($result)) $result = new stdClass();
                             $result->$inputKey = (array) $inputValue;
+                        }
                         else
+                        {
+                            if(!is_object($result)) $result = new stdClass();
                             $result->$inputKey = $this->sanitize_get_whitelist( $inputValue, $structureValue );
+                        }
 
                     }
 
                     else if( is_string( $inputValue ) || is_int( $inputValue ) || is_bool( $inputValue ) || is_array( $inputValue ) )
+                    {
+                        if(!is_object($result)) $result = new stdClass();
                         $result->$inputKey = $inputValue;
+                    }
 
                     else
                         $result = false;
