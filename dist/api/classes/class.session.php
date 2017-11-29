@@ -69,7 +69,7 @@ class session
 
                     $this->status = true;
 
-                    return $user->id;
+                    return $user['id'];
 
                 }
 

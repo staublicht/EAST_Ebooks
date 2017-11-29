@@ -41,12 +41,14 @@ class mysql
     public function login( $user = false )
     {
 
-        if( $user )
+        $session_id = session_id();
+
+        if( $user && $session_id )
         {
 
             $statement = $this->connection->prepare( "UPDATE users SET session_id = ? WHERE id = ?" );
 
-            $statement->bind_param("si", session_id(), $user);
+            $statement->bind_param("si", $session_id, $user);
 
             $result = $statement->execute();
 
