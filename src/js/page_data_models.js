@@ -6,6 +6,25 @@ var eBooks = new EbookServer.DataTableProvider(
     "ebooks", 120, 50, 1000*30
 );
 
+/*
+eBooks.onAddEntry = function(success, return_data){
+    if (success) {
+        //report success: create message, positive, message strings where?
+        //notify subscribers/trigger what happens on completion
+    }else{
+        //report failure:
+    }
+}
+
+eBooks.onDeleteEntry = function(success, return_data){
+    if (success) {
+        //report success
+    }else{
+        //report failure
+    }
+}
+*/
+
 var lookupPageData = {
     //login page
     0 : function(){
@@ -97,5 +116,14 @@ var lookupPageData = {
 
 exports.getModel = function(page_id, input_data){
     console.log("getting page data for id:", page_id);
+    if (!(typeof page_id === 'number' && (page_id % 1) === 0)) {
+        //not an integer
+        if (app_data.hasOwnProperty('page_id')) {
+            page_id = app_data[page_id];
+        } else {
+            console.log("page id not a number and not in list:", page_id);
+            return false;
+        }
+    }
     return lookupPageData[page_id](input_data);
 };

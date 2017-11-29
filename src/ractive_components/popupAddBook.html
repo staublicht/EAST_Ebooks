@@ -1,0 +1,60 @@
+<div class="modal fade {{#if show == true}}in{{/if}}" id="{{modal_id}}" style="display: {{ show == true ? 'block' : 'none' }};">
+	<!-- {{#if show == true}}in{{/if}} style="display: {{ show == true ? 'block' : 'none' }};"-->
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" on-click="dismiss" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Add New Book</h4>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="row form-group">
+						<div class="col-md-6">
+							<label for="author-txt">Author</label>
+							<input id="author-txt" class="form-control" type="text" required value="{{author}}" maxlength="30" />
+						</div>
+						<div class="col-md-6">
+							<label for="original-title-txt">Original Title</label>
+							<input id="original-title-txt" class="form-control" type="text" required value="{{title_original}}" maxlength="30" />
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-md-6">
+							<label for="lang-select">Language</label>
+							<select id="lang-select" class="custom-select" value="{{language}}">
+								{{#languages : i}}
+								<option value="{{i}}" {{# . === language}}selected{{/}}>{{.}}</option>
+								{{/languages}}
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" on-click="confirm">Ok</button>
+				<button type="button" class="btn btn-secondary" on-click="dismiss">Cancel</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<style>
+	.modal{
+	}
+</style>
+
+<script>
+    component.exports = {
+        isolated: true,
+        onrender: function () {
+            console.log( 'Edit Page loaded.');
+			this.find('#author-txt').focus(); //focus first input element
+            this.on('dismiss', function(event){
+                this.set('show',false);
+                return false;
+            });
+        }
+    };
+</script>

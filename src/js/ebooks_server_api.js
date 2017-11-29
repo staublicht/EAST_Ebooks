@@ -4,6 +4,12 @@
 
 var $ = require('jquery');
 var server_url = "api/index.php";
+var msg_strings = {
+    MSG_ADD_SUCCESS: "Succesfully added a new entry",
+    MSG_ADD_FAIL: "Could not add the new entry, because the server request failed.",
+    MSG_DELETE_SUCCESS: "Succesfully removed the entry",
+    MSG_DELETE_FAIL: "Could not remove the entry, because the server request failed."
+}
 
 function makeRequest(data, json_transform){
     var deferred = $.Deferred();
@@ -264,14 +270,19 @@ DataTableProvider.prototype = {
         });
     },
     addEntry: function(data){
-        _this = this;
+        var _this = this;
         //TODO validate!
         addSingle(_this.table_name,data).then(
             function (return_data) {
                 _this.retrieveData(); //reload table with extra data object
+                //example return_data : {data:199} //book id
+                //message success
+                var new_id = return_data.data;
+                _this.onAddEntryResult(true,new_id);
             }
         ).fail(function (e) {
             console.log("Server Request 'post' failed.", e);
+            _this.onAddEntryResult(false,-1);
             /*
             if(deferred) {
                 deferred.reject("Server Request 'put' failed.");
@@ -280,7 +291,7 @@ DataTableProvider.prototype = {
         });
     },
     deleteEntry: function(id){
-        _this = this;
+        var _this = this;
         deleteSingle(this.table_name,id).then(function (return_data) {
             console.log("Server Request 'delete' Return Data: ",JSON.stringify(return_data));
             dropFromArraybyValue(_this.data,"id",id); //drop data entry from table data
@@ -314,9 +325,21 @@ DataTableProvider.prototype = {
         clearTimeout(this.timer);
         this.autoUpdate = false;
     },
-    onUpdate : function() {
+    onUpdate: function(){
+        //empty hook function for updating linked data objects
         console.log( "Update received, but no update function implemented:", this.table_name);
-        //update linked data objects
+    },
+    onAddEntryResult : function(success,new_id) {
+        //empty hook function for result feedback
+    },
+    onDeleteEntryResult : function(success,old_id) {
+        //empty hook function for result feedback
+    },
+    onUpdateEntryResult : function(success) {
+        //empty hook function for result feedback
+    },
+    onActionFeedback : function(){
+
     },
     getData: function(){
         return this.data;

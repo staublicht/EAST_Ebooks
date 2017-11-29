@@ -65,7 +65,7 @@
 				<label for="lang-select">Language (required) </label>
 				<select id="lang-select" class="custom-select" value="{{language}}">
 					{{#languages : i}}
-					<option value="{{i}}" {{# . === language}}selected{{/i}}>{{.}}</option>
+					<option value="{{i}}" {{# . === language}}selected{{/}}>{{.}}</option>
 					{{/languages}}
 				</select>
 			</div>
@@ -149,7 +149,7 @@
                 return false;
             });
 
-			/*
+			/* old data change functions, now not needed as the object is directly linked to the db
             this.on('updateData', function(event, field_name){
                 var table, id, value, data;
 

@@ -5,8 +5,11 @@
 */
 
 //Definitions
-var jQuery, $, Ractive, EbookServer, bootstrap, app_data, mainRactive, PageDataModels;
-window.jQuery = $ = require('jquery');
+var jQuery, $, Ractive, EbookServer, app_data, mainRactive, PageDataModels;
+jQuery = $ = require('jquery');
+window.jQuery = window.$ = jQuery;
+window.Popper = require('popper.js'); //required by bootstrap tooltips, dropdowns
+require('bootstrap');
 Ractive = require('ractive');
 Ractive.load = require('ractive-load');
 EbookServer = require('./js/ebooks_server_api.js');

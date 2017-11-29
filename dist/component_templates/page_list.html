@@ -3,9 +3,12 @@
 <link rel='ractive' href='pagination.html?v=1' name='r-pagination'>
 <link rel='ractive' href='table.html?v=1' name='r-table'>
 <link rel='ractive' href='footer.html?v=1' name='r-footer'>
+<link rel='ractive' href='popupAddBook.html?v=1' name='r-popupAddBook'>
 
 <r-navbar id={{menu.id}} entries={{menu.entries}} selected_index={{menu.selected_index}}>
 </r-navbar>
+
+<h1>--- TEST ---</h1>
 
 {{#alerts}}
 <r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
@@ -41,19 +44,56 @@
 
 <r-footer></r-footer>
 
+<r-popupAddBook
+		modal_id = "popupAddBook"
+		show = {{showModal}}
+		author = "..."
+		title_original ="..."
+		languages={{languages}}
+		language = 0
+></r-popupAddBook>
+
 
 <script>
 	component.exports = {
 		onrender: function () {
 			console.log( 'List Page loaded.');
-
 			//create new book entry
             this.on( 'newClicked', function (event) {
+                console.log( 'New Book addition requested.', event );
+                //this.findComponent('r-popupAddBook').set({'show': true});
+				//$('#popupAddBook').modal('show');
+				this.set('showModal', true);
+                //this.find('#popupAddBook').set('show', true);
+
+                /*
                 var dp = this.get('data_table', {virtual : true});
                 console.log(dp);
                 if('addEntry' in dp){
                     //load edit page with right book id
                     dp.addEntry( {"author" : "Test", "title_original" : "Test"} );
+                }else{
+                    throw new SyntaxError("addEntry is not defined!");
+                }
+                */
+                return false;
+			});
+
+            this.on( 'r-popupAddBook.confirm', function (event) {
+                console.log( 'New Book addition confirmed.', event );
+                var bookTableDP = this.get('data_table', {virtual : true});
+                this.set('showModal', false);
+                //virtual gets DataProvider model with all its functionality
+                if('addEntry' in bookTableDP){
+                    bookTableDP.addEntry( {
+                        "author" : event.context.author,
+                        "title_original" : event.context.title_original,
+                        "language" : event.context.language
+                    } );
+                    //after successful post, TableDP reloads data then:
+					// and load edit page with right book id
+					// and give message feedback
+					loadPage(this.get('edit_page'),book_id)
                 }else{
                     throw new SyntaxError("addEntry is not defined!");
                 }
@@ -82,6 +122,7 @@
 		},
         data: function() {
             return {
+                "showModal" : false,
                 "selectedLang" : -1,
                 "selectedCat" : -1,
                 "selectedStatus" : -1,
