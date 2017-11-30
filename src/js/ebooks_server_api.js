@@ -233,7 +233,7 @@ DataTableProvider.prototype = {
     },
     getEntry: function(id){
         var entry = findFirstInArray(this.dataObjects,"id",id);
-        if(!entry){
+        if(!entry){ //problematic if we don't know table size
             entry = new DataObject(this, id);
             this.dataObjects.push(entry);
         }
@@ -274,15 +274,17 @@ DataTableProvider.prototype = {
         //TODO validate!
         addSingle(_this.table_name,data).then(
             function (return_data) {
-                _this.retrieveData(); //reload table with extra data object
+                _this.retrieveData(); //request reload table with extra data object
                 //example return_data : {data:199} //book id
                 //message success
                 var new_id = return_data.data;
-                _this.onAddEntryResult(true,new_id);
+                _this.onAddEntryResult(true,{"id" : new_id});
+                return true;
             }
         ).fail(function (e) {
             console.log("Server Request 'post' failed.", e);
-            _this.onAddEntryResult(false,-1);
+            _this.onAddEntryResult(false,{"error" : "Server Request 'post' failed."});
+            return false;
             /*
             if(deferred) {
                 deferred.reject("Server Request 'put' failed.");
@@ -292,16 +294,23 @@ DataTableProvider.prototype = {
     },
     deleteEntry: function(id){
         var _this = this;
+        var dp = _this.getEntry(id);
+        var d = dp.data;
+        d["id"] = id;
         deleteSingle(this.table_name,id).then(function (return_data) {
-            console.log("Server Request 'delete' Return Data: ",JSON.stringify(return_data));
+            console.log("Server Request 'delete' succcess. Return Data: ",return_data);
+            console.log("removing entry from table, cleaning up references.");
             dropFromArraybyValue(_this.data,"id",id); //drop data entry from table data
             var dps = dropFromArraybyValue(_this.dataObjects,"id",id); //remove associated DataObjects
             for(var i in dps){  //cleanup
                 dps[i].dispose();
             }
+            _this.onDeleteEntryResult(true, d);
             return true;
         }).fail(function (e) {
             console.log("Server Request 'delete' failed.", e);
+            d["error"] = "Server Request 'delete' failed.";
+            _this.onDeleteEntryResult(false, d);
             return false;
         });
     },
@@ -329,13 +338,13 @@ DataTableProvider.prototype = {
         //empty hook function for updating linked data objects
         console.log( "Update received, but no update function implemented:", this.table_name);
     },
-    onAddEntryResult : function(success,new_id) {
+    onAddEntryResult : function(success,return_data) {
         //empty hook function for result feedback
     },
-    onDeleteEntryResult : function(success,old_id) {
+    onDeleteEntryResult : function(success,return_data) {
         //empty hook function for result feedback
     },
-    onUpdateEntryResult : function(success) {
+    onUpdateEntryResult : function(success,return_data) {
         //empty hook function for result feedback
     },
     onActionFeedback : function(){

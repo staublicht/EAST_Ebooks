@@ -20,11 +20,49 @@ mainRactive = new Ractive();
 
 "use strict";
 
+//Database Event Hooks
+PageDataModels.Ebooks.onAddEntryResult = function(success, return_data){
+    console.log("Add Entry Success:", success, return_data);
+
+    if (success) {
+        showAlert("success", "Book added to the Database.",true );
+        loadPage("edit_page",return_data["id"]);
+    }else{
+        showAlert("danger", "Adding a new Book to the Database failed!",true);
+    }
+};
+
+PageDataModels.Ebooks.onDeleteEntryResult = function(success, return_data){
+    console.log("Delete Entry Success:", success, return_data);
+    if (success) {
+        showAlert("success", "Book removed from the Database.",true );
+        loadPage("list_page");
+    }else{
+        showAlert("danger", "Deleting a Book from the Database failed!",true);
+    }
+};
+
 function loadPage(page_id, input_data, data_overrides) {
+
+	//validate page id
+    if (!(typeof page_id === 'number' && (page_id % 1) === 0)) {
+        //not an integer
+        if (app_data.hasOwnProperty(page_id)) {
+            page_id = app_data[page_id];
+        } else {
+            console.log("page id not a number and not in list of pages:", page_id);
+            return false;
+        }
+    }
 
 	//check if logged in
 	var page = app_data.login_state ? page_id : app_data.login_page;
-	var pageDataModel = PageDataModels.getModel(page_id, input_data);
+
+    if(!app_data.login_state){
+        console.log("Not logged in. returning to login page.");
+	}
+
+	var pageDataModel = PageDataModels.getModel(page_id, input_data); //get page data
 	var data = app_data.login_state ? $.extend( app_data, pageDataModel, data_overrides) : {}; //full data or none if login
 
 	Ractive.load(app_data.pages[page].template_file).then(function (RPage) {
@@ -83,7 +121,9 @@ function serverLogout(){
 }
 
 function showAlert(type, content, dismissible) {
-	mainRactive.merge('alerts', [{ 'type' : type, 'content' : content, 'dismissible' : dismissible}]);
+	console.log("Creating Alert", type, content);
+	//types: primary, secondary, success, danger, warning, info, light, dark
+	mainRactive.push('alerts',{ type : type, content : content, dismissible : dismissible});
 }
 
 function init() {

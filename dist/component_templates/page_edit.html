@@ -9,9 +9,10 @@
 </style>
 
 
-<link rel='ractive' href='navbar.html?v=1' name='r-navbar'>
-<link rel='ractive' href='dropdownbtnall.html?v=1' name='r-dropdown'>
-<link rel='ractive' href='footer.html?v=1' name='r-footer'>
+<link rel='ractive' href='navbar.html' name='r-navbar'>
+<link rel='ractive' href='dropdownbtnall.html' name='r-dropdown'>
+<link rel='ractive' href='footer.html' name='r-footer'>
+<link rel='ractive' href='alert.html' name='r-alert'>
 
 <r-navbar id={{menu.id}} entries={{menu.entries}} selected_index={{menu.selected_index}}>
 </r-navbar>
@@ -36,7 +37,9 @@
 {{/edit_book}}
 
 {{#if alerts}}
-<r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
+    {{#alerts}}
+        <r-alert type={{type}} dismissible={{dismissible}} content={{content}} />
+    {{/alerts}}
 {{else}}
 <p class="text-muted">No warnings.</p>
 {{/if}}

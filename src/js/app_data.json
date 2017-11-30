@@ -15,6 +15,7 @@
 		],
 		"selected_index" : 0
 	},
+	"alerts" : [],
 	"menu_target_types" : [
 		"page"
 	],
@@ -24,9 +25,10 @@
 		{"id" : 2, "title" : "Edit Book", "template_file" : "page_edit.html"}
 	],
 	"login_page" : 0,
-	"index_page" : 1,
+	"list_page" : 1,
 	"edit_page" : 2,
 	"current_page" : -1,
+	"index_page" : 1,
 	"languages" : ["English", "Turkmen", "Farsi"],
 	"categories" : ["Family"],
 	"status_tags" : [

@@ -1,6 +1,6 @@
-<div class="alert alert-{{type}} {{#dismissible}}alert-dismissible{{/dismissible}} fade in" role="alert">
+<div class="alert alert-{{type}} {{#dismissible}}alert-dismissible{{/dismissible}} fade show" role="alert">
 	{{#dismissible}}
-	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	<button type="button" class="close" on-click="removeClick" data-dismiss="alert" aria-label="Close">
 		<span aria-hidden="true">&times;</span>
 	</button>
 	{{/dismissible}}
@@ -11,6 +11,10 @@
 <script>
 	component.exports = {
 		onrender: function () {
+            this.on( 'removeClick', function (event) {
+                //expand to manage several alerts and remove the alerts when needed
+                return false;
+            });
 		},
 		isolated: true,
 		data: function () {
@@ -21,3 +25,4 @@
 		}
 	};
 </script>
+

@@ -1,9 +1,10 @@
-<link rel='ractive' href='navbar.html?v=1' name='r-navbar'>
-<link rel='ractive' href='filters.html?v=1' name='r-filters'>
-<link rel='ractive' href='pagination.html?v=1' name='r-pagination'>
-<link rel='ractive' href='table.html?v=1' name='r-table'>
-<link rel='ractive' href='footer.html?v=1' name='r-footer'>
-<link rel='ractive' href='popupAddBook.html?v=1' name='r-popupAddBook'>
+<link rel='ractive' href='navbar.html' name='r-navbar'>
+<link rel='ractive' href='filters.html' name='r-filters'>
+<link rel='ractive' href='pagination.html' name='r-pagination'>
+<link rel='ractive' href='table.html' name='r-table'>
+<link rel='ractive' href='footer.html' name='r-footer'>
+<link rel='ractive' href='popupAddBook.html' name='r-popupAddBook'>
+<link rel='ractive' href='alert.html' name='r-alert'>
 
 <r-navbar id={{menu.id}} entries={{menu.entries}} selected_index={{menu.selected_index}}>
 </r-navbar>
@@ -90,10 +91,7 @@
                         "title_original" : event.context.title_original,
                         "language" : event.context.language
                     } );
-                    //after successful post, TableDP reloads data then:
-					// and load edit page with right book id
-					// and give message feedback
-					loadPage(this.get('edit_page'),book_id)
+
                 }else{
                     throw new SyntaxError("addEntry is not defined!");
                 }
@@ -107,7 +105,7 @@
 
 				if(typeof loadPage !== 'undefined'){
 				    //load edit page with right book id
-					loadPage( this.get('edit_page') , event.id );
+					loadPage( 'edit_page' , event.id );
 				}else{
 					throw new SyntaxError("loadPage is not defined!");
 				}

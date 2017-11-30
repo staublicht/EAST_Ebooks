@@ -1,12 +1,12 @@
-<div class="modal fade {{#if show == true}}in{{/if}}" id="{{modal_id}}" style="display: {{ show == true ? 'block' : 'none' }};">
+<div class="modal fade {{#if show == true}}show{{/if}}" id="{{modal_id}}" style="display: {{ show == true ? 'block' : 'none' }};" tabindex="-1" role="dialog">
 	<!-- {{#if show == true}}in{{/if}} style="display: {{ show == true ? 'block' : 'none' }};"-->
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
+				<h4 class="modal-title">Add New Book</h4>
 				<button type="button" class="close" on-click="dismiss" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-				<h4 class="modal-title">Add New Book</h4>
 			</div>
 			<div class="modal-body">
 				<form>
